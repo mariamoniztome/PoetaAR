@@ -1,0 +1,5 @@
+{
+  "name": "Imersão AR: Alto Mar, Campo e Céu",
+  "description": "Experiências imersivas em AR com oceano, flores e pássaros que reagem ao movimento.",
+  "requestFramePermissions": ["camera"]
+}
