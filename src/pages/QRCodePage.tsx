@@ -1,57 +1,115 @@
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
-import { Ship, Flower, Cloud, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Printer } from 'lucide-react';
+import type { AppTexts } from '../types/content';
 
 export default function QRCodePage() {
+  const [texts, setTexts] = useState<AppTexts | null>(null);
   const baseUrl = window.location.origin;
 
-  const scenes = [
-    { id: 'sea', name: 'Alto Mar', icon: <Ship size={24} />, color: '#3b82f6', url: `${baseUrl}/scene/sea` },
-    { id: 'field', name: 'Campo de Flores', icon: <Flower size={24} />, color: '#10b981', url: `${baseUrl}/scene/field` },
-    { id: 'sky', name: 'Céu Aberto', icon: <Cloud size={24} />, color: '#0ea5e9', url: `${baseUrl}/scene/sky` },
-  ];
+  useEffect(() => {
+    fetch('/data/texts.json')
+      .then(res => res.json())
+      .then(setTexts)
+      .catch(err => console.error('Error loading texts:', err));
+  }, []);
+
+  if (!texts) return null;
 
   return (
-    <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col items-center p-6 font-sans">
-      <div className="max-w-4xl w-full space-y-12">
-        <div className="flex items-center justify-between">
-          <Link 
-            to="/"
-            className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors"
+    <div className="w-full min-h-screen bg-[#f5f5f0] text-black flex flex-col items-center p-6 md:p-12 font-sans selection:bg-black selection:text-white">
+      <div className="max-w-5xl w-full space-y-16">
+        {/* Header */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-black/10 pb-12">
+          <div className="space-y-4">
+            <Link 
+              to="/"
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity mb-4"
+            >
+              <ArrowLeft size={14} />
+              Voltar à Timeline
+            </Link>
+            <h1 className="text-6xl font-serif tracking-tighter leading-none">
+              {texts.markersPage.title}
+            </h1>
+            <p className="text-sm font-mono uppercase tracking-[0.2em] opacity-40">
+              {texts.markersPage.subtitle}
+            </p>
+          </div>
+          
+          <button 
+            onClick={() => window.print()}
+            className="flex items-center gap-3 px-6 py-3 border border-black/10 hover:bg-black hover:text-white transition-all font-serif italic text-lg group"
           >
-            <ArrowLeft size={20} />
-            Voltar
-          </Link>
-          <h1 className="text-3xl font-light tracking-widest uppercase">Markers (QR Codes)</h1>
+            <Printer size={18} />
+            {texts.markersPage.printButton}
+          </button>
+        </header>
+
+        {/* Instructions */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 py-8 border-b border-black/10">
+          <div className="space-y-2">
+            <span className="font-mono text-[10px] opacity-30 uppercase tracking-widest">Passo 01</span>
+            <p className="text-sm leading-relaxed">{texts.markersPage.instructionLine1}</p>
+          </div>
+          <div className="space-y-2">
+            <span className="font-mono text-[10px] opacity-30 uppercase tracking-widest">Passo 02</span>
+            <p className="text-sm leading-relaxed">{texts.markersPage.instructionLine2}</p>
+          </div>
+          <div className="space-y-2">
+            <span className="font-mono text-[10px] opacity-30 uppercase tracking-widest">Passo 03</span>
+            <p className="text-sm leading-relaxed">{texts.markersPage.instructionLine3}</p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {scenes.map((scene) => (
+        {/* Markers Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {texts.poems.map((poem, index) => (
             <div 
-              key={scene.id}
-              className="flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-3xl space-y-6"
+              key={poem.id}
+              className="flex flex-col items-center p-12 bg-white border border-black/5 shadow-sm space-y-8 print:shadow-none print:border-black/20"
             >
-              <div className="p-4 rounded-2xl" style={{ backgroundColor: `${scene.color}20`, color: scene.color }}>
-                {scene.icon}
+              <div className="text-center space-y-2">
+                <span className="font-serif italic text-4xl opacity-20">{poem.marker.roman}</span>
+                <h3 className="font-serif text-2xl italic">{poem.marker.label}</h3>
               </div>
-              <h3 className="font-medium text-lg">{scene.name}</h3>
               
-              <div className="p-4 bg-white rounded-2xl">
+              <div className="p-6 bg-white border border-black/5 rounded-sm shadow-inner">
                 <QRCodeSVG 
-                  value={scene.url} 
-                  size={180}
+                  value={`${baseUrl}${poem.marker.qrCode}`} 
+                  size={200}
                   level="H"
                   includeMargin={false}
                 />
               </div>
               
-              <p className="text-xs text-neutral-500 text-center">
-                Digitaliza este código com o teu telemóvel para entrares na cena em AR.
+              <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-center opacity-30">
+                {texts.markersPage.markerPrefix} {index + 1}
               </p>
             </div>
           ))}
         </div>
+
+        {/* Footer */}
+        <footer className="pt-24 pb-12 text-center opacity-20">
+          <p className="text-[10px] font-mono uppercase tracking-[0.5em]">
+            {texts.markersPage.footer}
+          </p>
+        </footer>
       </div>
+
+      {/* Print Styles */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          body { background: white; }
+          .no-print { display: none; }
+          button { display: none; }
+          a { display: none; }
+          .grid { display: block; }
+          .grid > div { margin-bottom: 40px; page-break-inside: avoid; }
+        }
+      `}} />
     </div>
   );
 }

@@ -66,8 +66,8 @@ export function Bird({ index, total }: { index: number, total: number }) {
   return (
     <group ref={meshRef}>
       {/* Body */}
-      <mesh>
-        <coneGeometry args={[0.05, 0.2, 4]} rotation={[Math.PI / 2, 0, 0]} />
+      <mesh rotation={[Math.PI / 2, 0, 0]}>
+        <coneGeometry args={[0.05, 0.2, 4]} />
         <meshStandardMaterial color="#333" />
       </mesh>
       

@@ -1,0 +1,107 @@
+{
+  "timelinePage": {
+    "header": {
+      "titleHtml": "O Poeta<br><em>Carpinteiro</em>"
+    },
+    "events": [
+      {
+        "year": "1988",
+        "title": "As Primeiras Aparas",
+        "desc": "Onde a madeira encontrou a palavra pela primeira vez.",
+        "imageA": "https://picsum.photos/seed/wood1/200/200"
+      },
+      {
+        "year": "2002",
+        "title": "O Mar de Serradura",
+        "desc": "Uma viagem pelas águas profundas da imaginação.",
+        "imageB": "https://picsum.photos/seed/sea1/200/200"
+      },
+      {
+        "year": "2024",
+        "title": "O Voo das Andorinhas",
+        "desc": "A liberdade final esculpida no céu aberto.",
+        "imageA": "https://picsum.photos/seed/sky1/200/200"
+      }
+    ],
+    "ctaLabel": "Explora o mundo do poeta",
+    "ctaButton": "Entrar em Realidade Aumentada"
+  },
+  "poems": [
+    {
+      "id": "poem-1",
+      "title": "Oceano de Madeira",
+      "verses": [
+        "As ondas são de carvalho,",
+        "O sal é pó de lixa,",
+        "Navego num barco de entalho,",
+        "Onde a alma se fixa."
+      ],
+      "marker": {
+        "roman": "I",
+        "label": "O Mar",
+        "qrCode": "/scene/sea"
+      }
+    },
+    {
+      "id": "poem-2",
+      "title": "Jardim de Serragem",
+      "verses": [
+        "Flores de pinho e cedro,",
+        "Crescem no chão da oficina,",
+        "Onde o medo eu desmedro,",
+        "E a vida se ilumina."
+      ],
+      "marker": {
+        "roman": "II",
+        "label": "O Campo",
+        "qrCode": "/scene/field"
+      }
+    },
+    {
+      "id": "poem-3",
+      "title": "Céu de Verniz",
+      "verses": [
+        "Pássaros de faia voam,",
+        "Nuvens de algodão e cola,",
+        "As vozes do vento ecoam,",
+        "Nesta imensa gaiola."
+      ],
+      "marker": {
+        "roman": "III",
+        "label": "O Céu",
+        "qrCode": "/scene/sky"
+      }
+    }
+  ],
+  "screens": {
+    "ar": {
+      "statusInitial": "A iniciar câmara...",
+      "hudIndicatorWaiting": "À espera de marcador...",
+      "loadingText": "A preparar o mundo do poeta...",
+      "hudTitle": "Poeta Carpinteiro AR",
+      "backButton": "Sair"
+    }
+  },
+  "ui": {
+    "ar": {
+      "statusPointToQr": "Aponta para um QR Code",
+      "statusQrDetected": "Marcador detetado!",
+      "statusWorldBloom": "O mundo está a florescer...",
+      "indicatorPrefix": "A ver: ",
+      "indicatorNoCamera": "Câmara não disponível"
+    },
+    "cameraErrors": {
+      "fallback": "Erro ao aceder à câmara."
+    }
+  },
+  "markersPage": {
+    "title": "Marcadores do Poeta",
+    "subtitle": "Imprime ou visualiza estes códigos para ativar a AR",
+    "instructionLine1": "1. Abre a aplicação no teu telemóvel.",
+    "instructionLine2": "2. Clica em 'Entrar em AR'.",
+    "instructionLine3": "3. Aponta para um destes QR Codes.",
+    "printButton": "Imprimir Marcadores",
+    "footer": "© 2026 Poeta Carpinteiro - Experiência Imersiva",
+    "markerPrefix": "Marcador "
+  }
+}
