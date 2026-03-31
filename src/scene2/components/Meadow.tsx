@@ -70,10 +70,10 @@ export function Meadow() {
 
   return (
     <group>
-      {/* Ground */}
+      {/* Ground (Grass) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.51, 0]} receiveShadow>
         <planeGeometry args={[100, 100]} />
-        <meshStandardMaterial color="#1a3c15" />
+        <meshStandardMaterial color="#1a3c15" transparent opacity={0.7} />
       </mesh>
       
       {/* Flowers */}

@@ -35,7 +35,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/qrcodes" element={<QRCodePage />} />
+        <Route path="/markers" element={<QRCodePage />} />
         <Route path="/scene/:sceneId" element={<SceneWrapper />} />
       </Routes>
     </BrowserRouter>

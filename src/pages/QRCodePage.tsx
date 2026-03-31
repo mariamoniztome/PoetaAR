@@ -22,7 +22,7 @@ export default function QRCodePage() {
             <ArrowLeft size={20} />
             Voltar
           </Link>
-          <h1 className="text-3xl font-light tracking-widest uppercase">Gerar QR Codes</h1>
+          <h1 className="text-3xl font-light tracking-widest uppercase">Markers (QR Codes)</h1>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { useEffect, useRef, useState } from 'react';
+import { Html5Qrcode } from 'html5-qrcode';
 import { useNavigate } from 'react-router-dom';
-import { X } from 'lucide-react';
+import { X, Camera } from 'lucide-react';
 
 interface QRScannerProps {
   onClose: () => void;
@@ -10,40 +10,60 @@ interface QRScannerProps {
 export default function QRScanner({ onClose }: QRScannerProps) {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const scannerRef = useRef<Html5Qrcode | null>(null);
 
   useEffect(() => {
-    const scanner = new Html5QrcodeScanner(
-      "reader",
-      { 
-        fps: 10, 
-        qrbox: { width: 250, height: 250 },
-        aspectRatio: 1.0
-      },
-      /* verbose= */ false
-    );
+    const html5QrCode = new Html5Qrcode("reader");
+    scannerRef.current = html5QrCode;
 
-    const onScanSuccess = (decodedText: string) => {
-      // Check if the URL belongs to our app
-      if (decodedText.includes('/scene/')) {
-        const path = decodedText.split(window.location.origin)[1] || decodedText;
-        scanner.clear();
-        navigate(path);
-        onClose();
-      } else {
-        setError("QR Code inválido para esta aplicação.");
+    const startScanner = async () => {
+      try {
+        setIsScanning(true);
+        await html5QrCode.start(
+          { facingMode: "environment" },
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+          },
+          (decodedText) => {
+            if (decodedText.includes('/scene/')) {
+              const path = decodedText.split(window.location.origin)[1] || decodedText;
+              stopScanner().then(() => {
+                navigate(path);
+                onClose();
+              });
+            } else {
+              setError("QR Code inválido para esta aplicação.");
+            }
+          },
+          (errorMessage) => {
+            // Scanning...
+          }
+        );
+      } catch (err) {
+        console.error("Error starting scanner:", err);
+        setError("Não foi possível aceder à câmara. Verifica as permissões.");
+        setIsScanning(false);
       }
     };
 
-    const onScanFailure = (error: any) => {
-      // Silent failure for continuous scanning
-    };
-
-    scanner.render(onScanSuccess, onScanFailure);
+    startScanner();
 
     return () => {
-      scanner.clear().catch(err => console.error("Failed to clear scanner", err));
+      stopScanner();
     };
   }, [navigate, onClose]);
+
+  const stopScanner = async () => {
+    if (scannerRef.current && scannerRef.current.isScanning) {
+      try {
+        await scannerRef.current.stop();
+      } catch (err) {
+        console.error("Error stopping scanner:", err);
+      }
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-6">
@@ -57,7 +77,14 @@ export default function QRScanner({ onClose }: QRScannerProps) {
       <div className="w-full max-w-md space-y-6 text-center">
         <h2 className="text-2xl font-light tracking-widest uppercase text-white">Digitalizar QR Code</h2>
         
-        <div id="reader" className="overflow-hidden rounded-3xl border-2 border-white/20 bg-neutral-900"></div>
+        <div className="relative overflow-hidden rounded-3xl border-2 border-white/20 bg-neutral-900 aspect-square">
+          <div id="reader" className="w-full h-full"></div>
+          {!isScanning && !error && (
+            <div className="absolute inset-0 flex items-center justify-center text-neutral-500">
+              <Camera size={48} className="animate-pulse" />
+            </div>
+          )}
+        </div>
         
         {error && (
           <p className="text-red-400 text-sm bg-red-400/10 p-3 rounded-xl border border-red-400/20">

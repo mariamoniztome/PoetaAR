@@ -102,7 +102,7 @@ const fragmentShader = `
     float foamThreshold = 0.6 + (1.0 - uEnergy) * 0.4;
     float foam = smoothstep(foamThreshold, foamThreshold + 0.2, mixStrength);
     color = mix(color, vec3(0.9, 0.95, 1.0), foam * uEnergy * 0.8);
-    gl_FragColor = vec4(color, 0.9);
+    gl_FragColor = vec4(color, 0.6);
   }
 `;
 

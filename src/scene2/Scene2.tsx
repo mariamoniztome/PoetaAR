@@ -1,10 +1,8 @@
 import { Canvas } from '@react-three/fiber';
-import { XR, createXRStore } from '@react-three/xr';
 import { ARScene } from './components/ARScene';
 import { useStore } from './store';
 import { MusicPlayer } from '../components/MusicPlayer';
-
-const store = createXRStore();
+import { CameraBackground } from '../components/CameraBackground';
 
 interface Scene2Props {
   title?: string;
@@ -17,22 +15,11 @@ export default function Scene2({
 }: Scene2Props) {
   const energy = useStore((state) => state.energy);
 
-  const handleEnterAR = async () => {
-    if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
-      try {
-        const permissionState = await (DeviceMotionEvent as any).requestPermission();
-        if (permissionState === 'granted') {
-          console.log('Device motion permission granted');
-        }
-      } catch (error) {
-        console.error('Error requesting device motion permission:', error);
-      }
-    }
-    store.enterAR();
-  };
-
   return (
-    <div className="w-full h-full bg-emerald-900 relative overflow-hidden font-sans">
+    <div className="w-full h-full bg-black relative overflow-hidden font-sans">
+      {/* Camera feed in the background */}
+      <CameraBackground />
+
       {/* Music Player for Scene 2 */}
       <MusicPlayer url="https://assets.mixkit.co/music/preview/mixkit-forest-birds-and-creek-loop-123.mp3" />
 
@@ -54,21 +41,14 @@ export default function Scene2({
         </div>
       </div>
 
-      {/* AR Button Container */}
-      <div className="absolute bottom-10 left-0 w-full flex justify-center z-10">
-        <button 
-          onClick={handleEnterAR}
-          className="px-6 py-3 bg-white/10 backdrop-blur-md border border-white/30 text-white rounded-full uppercase tracking-wider text-sm hover:bg-white/20 transition-colors pointer-events-auto cursor-pointer"
-        >
-          Entrar em AR
-        </button>
-      </div>
-
       {/* 3D Canvas */}
-      <Canvas shadows camera={{ position: [0, 2, 5], fov: 60 }}>
-        <XR store={store}>
-          <ARScene />
-        </XR>
+      <Canvas 
+        shadows 
+        camera={{ position: [0, 2, 5], fov: 60 }}
+        gl={{ alpha: true, antialias: true }}
+        className="z-10"
+      >
+        <ARScene />
       </Canvas>
     </div>
   );
