@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { XR, createXRStore } from '@react-three/xr';
 import { ARScene } from './components/ARScene';
 import { useStore } from './store';
+import { MusicPlayer } from '../components/MusicPlayer';
 
 const store = createXRStore();
 
@@ -32,6 +33,9 @@ export default function Scene3({
 
   return (
     <div className="w-full h-full bg-sky-900 relative overflow-hidden font-sans">
+      {/* Music Player for Scene 3 */}
+      <MusicPlayer url="https://assets.mixkit.co/music/preview/mixkit-ethereal-fairy-tale-624.mp3" />
+
       {/* UI Overlay */}
       <div className="absolute top-0 left-0 w-full p-6 z-10 pointer-events-none flex flex-col items-center justify-center text-white text-center">
         <h1 className="text-3xl font-light tracking-widest uppercase mb-2 drop-shadow-lg">
