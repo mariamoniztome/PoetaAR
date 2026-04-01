@@ -27,24 +27,6 @@ export default function Scene3({
         narrationUrl={SOUND_PATHS.SKY_NARRATION} 
       />
 
-      {/* UI Overlay */}
-      <div className="absolute top-0 left-0 w-full p-6 z-10 pointer-events-none flex flex-col items-center justify-center text-white text-center">
-        <h1 className="text-3xl font-light tracking-widest uppercase mb-2 drop-shadow-lg">
-          {title}
-        </h1>
-        <p className="text-sm opacity-80 max-w-md drop-shadow-md">
-          {description}
-        </p>
-        
-        {/* Wind Energy Indicator */}
-        <div className="w-48 h-1 bg-white/20 mt-4 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-sky-400 transition-all duration-100 ease-out"
-            style={{ width: `${energy * 100}%` }}
-          />
-        </div>
-      </div>
-
       {/* 3D Canvas */}
       <Canvas 
         shadows 
