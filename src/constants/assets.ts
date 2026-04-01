@@ -1,22 +1,18 @@
-/**
- * Centralized paths for 3D models.
- * Replace these paths with your actual .glb or .gltf files.
- * Example: '/assets/models/flower.glb'
- */
+const modelUrl = (fileName: string) => new URL(`../assets/models/${fileName}`, import.meta.url).href;
 
 export const MODEL_PATHS = {
   // Scene 1: Ocean & Floating Object
-  // Using a public URL as an example. Replace with your own URL or local path.
-  FLOATING_OBJECT: 'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/book/model.gltf',
-  CLOUD: 'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/cloud/model.gltf',
-  
+  FLOATING_OBJECT: modelUrl('field.glb'),
+  CLOUD: modelUrl('flower1.glb'),
+
   // Scene 2: Meadow
-  FLOWER: 'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/sunflower/model.gltf',
-  GRASS: 'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/grass/model.gltf',
+  FLOWER: modelUrl('flowers.glb'),
+  GRASS: modelUrl('grass.glb'),
   
   // Scene 3: Flock
-  BIRD: 'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/pigeon/model.gltf',
+  BIRD: modelUrl('bird.glb'),
 };
+
 
 export const SOUND_PATHS = {
   // Scene 1: Sea
