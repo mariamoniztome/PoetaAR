@@ -1,8 +1,9 @@
 import { Canvas } from '@react-three/fiber';
 import { ARScene } from './components/ARScene';
 import { useStore } from './store';
-import { MusicPlayer } from '../components/MusicPlayer';
+import { AudioExperience } from '../components/AudioExperience';
 import { CameraBackground } from '../components/CameraBackground';
+import { SOUND_PATHS } from '../constants/assets';
 
 interface Scene2Props {
   title?: string;
@@ -20,8 +21,11 @@ export default function Scene2({
       {/* Camera feed in the background */}
       <CameraBackground />
 
-      {/* Music Player for Scene 2 */}
-      <MusicPlayer url="https://assets.mixkit.co/music/preview/mixkit-forest-birds-and-creek-loop-123.mp3" />
+      {/* Audio Experience for Scene 2 */}
+      <AudioExperience 
+        backgroundUrl={SOUND_PATHS.FIELD_BG} 
+        narrationUrl={SOUND_PATHS.FIELD_NARRATION} 
+      />
 
       {/* UI Overlay */}
       <div className="absolute top-0 left-0 w-full p-6 z-10 pointer-events-none flex flex-col items-center justify-center text-white text-center">
