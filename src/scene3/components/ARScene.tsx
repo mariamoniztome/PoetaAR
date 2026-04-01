@@ -1,8 +1,22 @@
-import { Suspense } from 'react';
-import { Clouds, Cloud } from '@react-three/drei';
+import { Suspense, useMemo } from 'react';
+import { Clouds, Cloud, useGLTF } from '@react-three/drei';
 import { Flock } from './Flock';
 import { MotionController } from './MotionController';
 import * as THREE from 'three';
+import { MODEL_PATHS } from '../../constants/assets';
+
+function CustomCloud({ position, scale = 1 }: { position: [number, number, number], scale?: number }) {
+  const { scene } = useGLTF(MODEL_PATHS.CLOUD);
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
+  
+  return (
+    <primitive 
+      object={clonedScene} 
+      position={position} 
+      scale={scale} 
+    />
+  );
+}
 
 export function ARScene() {
   return (
@@ -20,7 +34,12 @@ export function ARScene() {
       <Suspense fallback={null}>
         <Flock />
         
-        {/* Cinematic clouds floating in your room */}
+        {/* Custom 3D Clouds */}
+        <CustomCloud position={[-5, 2, -12]} scale={2} />
+        <CustomCloud position={[8, 0, -15]} scale={1.5} />
+        <CustomCloud position={[0, 4, -20]} scale={3} />
+
+        {/* Procedural clouds as background depth */}
         <Clouds material={THREE.MeshStandardMaterial}>
           <Cloud 
             segments={20} 
@@ -29,19 +48,12 @@ export function ARScene() {
             color="#ffffff" 
             position={[0, -2, -10]} 
             speed={0.1}
-            opacity={0.5}
-          />
-          <Cloud 
-            segments={15} 
-            bounds={[10, 2, 10]} 
-            volume={5} 
-            color="#f0f8ff" 
-            position={[10, 2, -15]} 
-            speed={0.2}
-            opacity={0.4}
+            opacity={0.3}
           />
         </Clouds>
       </Suspense>
     </>
   );
 }
+
+useGLTF.preload(MODEL_PATHS.CLOUD);

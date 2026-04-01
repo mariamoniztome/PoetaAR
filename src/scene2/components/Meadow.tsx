@@ -1,12 +1,18 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { useStore } from '../store';
+import { MODEL_PATHS } from '../../constants/assets';
 
 export function WildFlower({ position, color }: { position: [number, number, number], color: string }) {
   const meshRef = useRef<THREE.Group>(null);
-  const stemRef = useRef<THREE.Mesh>(null);
   
+  // Load the model
+  // Note: If the model doesn't exist yet, this will wait for Suspense
+  const { scene } = useGLTF(MODEL_PATHS.FLOWER);
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
+
   // Random offset for natural variety
   const offset = useMemo(() => Math.random() * Math.PI * 2, []);
   const speed = useMemo(() => 0.5 + Math.random() * 0.5, []);
@@ -30,56 +36,71 @@ export function WildFlower({ position, color }: { position: [number, number, num
 
   return (
     <group position={position} ref={meshRef}>
-      {/* Stem */}
-      <mesh position={[0, 0.5, 0]} ref={stemRef}>
-        <cylinderGeometry args={[0.02, 0.02, 1, 8]} />
-        <meshStandardMaterial color="#2d5a27" />
-      </mesh>
-      
-      {/* Flower Head (Placeholder) */}
-      <mesh position={[0, 1, 0]}>
-        <sphereGeometry args={[0.1, 8, 8]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.2} />
-      </mesh>
-      
-      {/* Petals (Simple representation) */}
-      <group position={[0, 1, 0]}>
-        {[0, 1, 2, 3, 4].map((i) => (
-          <mesh key={i} rotation={[0, (i * Math.PI * 2) / 5, 0.5]}>
-            <planeGeometry args={[0.2, 0.4]} />
-            <meshStandardMaterial color={color} side={THREE.DoubleSide} />
-          </mesh>
-        ))}
-      </group>
+      {/* If you want to color the model dynamically, you can traverse it here */}
+      <primitive object={clonedScene} />
     </group>
   );
 }
 
+export function Grass({ position }: { position: [number, number, number] }) {
+  const { scene } = useGLTF(MODEL_PATHS.GRASS);
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
+  const rotation = useMemo(() => Math.random() * Math.PI * 2, []);
+  const scale = useMemo(() => 0.8 + Math.random() * 0.4, []);
+
+  return (
+    <primitive 
+      object={clonedScene} 
+      position={position} 
+      rotation={[0, rotation, 0]} 
+      scale={scale} 
+    />
+  );
+}
+
 export function Meadow() {
-  const flowers = useMemo(() => {
-    const temp = [];
+  const { flowers, grassPatches } = useMemo(() => {
+    const f = [];
+    const g = [];
     const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+    
     for (let i = 0; i < 40; i++) {
       const x = (Math.random() - 0.5) * 10;
       const z = (Math.random() - 0.5) * 10;
       const color = colors[Math.floor(Math.random() * colors.length)];
-      temp.push({ position: [x, -1.5, z] as [number, number, number], color });
+      f.push({ position: [x, -1.5, z] as [number, number, number], color });
     }
-    return temp;
+
+    for (let i = 0; i < 60; i++) {
+      const x = (Math.random() - 0.5) * 15;
+      const z = (Math.random() - 0.5) * 15;
+      g.push({ position: [x, -1.5, z] as [number, number, number] });
+    }
+
+    return { flowers: f, grassPatches: g };
   }, []);
 
   return (
     <group>
-      {/* Ground (Grass) */}
+      {/* Ground (Grass Plane) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.51, 0]} receiveShadow>
         <planeGeometry args={[100, 100]} />
         <meshStandardMaterial color="#1a3c15" transparent opacity={0.7} />
       </mesh>
       
+      {/* Grass Models */}
+      {grassPatches.map((g, i) => (
+        <Grass key={`grass-${i}`} position={g.position} />
+      ))}
+
       {/* Flowers */}
       {flowers.map((f, i) => (
-        <WildFlower key={i} position={f.position} color={f.color} />
+        <WildFlower key={`flower-${i}`} position={f.position} color={f.color} />
       ))}
     </group>
   );
 }
+
+// Preload models
+useGLTF.preload(MODEL_PATHS.FLOWER);
+useGLTF.preload(MODEL_PATHS.GRASS);

@@ -2,8 +2,9 @@ import { Suspense } from 'react';
 import { Ocean } from './Ocean';
 import { FloatingObject } from './FloatingObject';
 import { MotionController } from './MotionController';
+import { MODEL_PATHS } from '../../constants/assets';
 
-export function ARScene({ modelUrl }: { modelUrl?: string }) {
+export function ARScene({ modelUrl = MODEL_PATHS.FLOATING_OBJECT }: { modelUrl?: string }) {
   return (
     <>
       <MotionController />

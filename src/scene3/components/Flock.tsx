@@ -1,18 +1,33 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
 import { useStore } from '../store';
+import { MODEL_PATHS } from '../../constants/assets';
 
 export function Bird({ index, total }: { index: number, total: number }) {
   const meshRef = useRef<THREE.Group>(null);
-  const wingLeftRef = useRef<THREE.Mesh>(null);
-  const wingRightRef = useRef<THREE.Mesh>(null);
+  
+  // Load the model
+  const { scene, animations } = useGLTF(MODEL_PATHS.BIRD);
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
+  const { actions } = useAnimations(animations, meshRef);
+
+  // Play animation if it exists
+  useEffect(() => {
+    if (actions && Object.keys(actions).length > 0) {
+      const firstAction = Object.values(actions)[0];
+      if (firstAction) {
+        firstAction.play();
+      }
+    }
+  }, [actions]);
 
   // Random offsets for natural variety
   const offset = useMemo(() => Math.random() * Math.PI * 2, []);
   const speed = useMemo(() => 0.8 + Math.random() * 0.4, []);
   
-  // Initial position in a flock formation (V-shape or sphere)
+  // Initial position in a flock formation
   const initialPos = useMemo(() => {
     const angle = (index / total) * Math.PI * 2;
     const radius = 2 + Math.random();
@@ -28,15 +43,14 @@ export function Bird({ index, total }: { index: number, total: number }) {
   const noiseOffset = useMemo(() => new THREE.Vector3(Math.random(), Math.random(), Math.random()), []);
 
   useFrame((state) => {
-    if (!meshRef.current || !wingLeftRef.current || !wingRightRef.current) return;
+    if (!meshRef.current) return;
     
     const t = state.clock.elapsedTime;
     const energy = useStore.getState().energy;
 
     // 1. Calculate target position
-    // Base flocking position + some noise
     const baseNoise = 0.2;
-    const stormyNoise = energy * 5.0; // Scatter birds when energy is high
+    const stormyNoise = energy * 5.0; 
     
     targetPos.current.set(
       initialPos.x + Math.sin(t * speed + noiseOffset.x * 10) * (baseNoise + stormyNoise),
@@ -44,42 +58,30 @@ export function Bird({ index, total }: { index: number, total: number }) {
       initialPos.z + Math.sin(t * speed * 1.2 + noiseOffset.z * 10) * (baseNoise + stormyNoise)
     );
 
-    // 2. Smoothly move towards target (inertia/weight)
-    const lerpSpeed = energy > 0.5 ? 0.02 : 0.05; // Slower reorganization
+    // 2. Smoothly move towards target
+    const lerpSpeed = energy > 0.5 ? 0.02 : 0.05;
     currentPos.current.lerp(targetPos.current, lerpSpeed);
     meshRef.current.position.copy(currentPos.current);
 
-    // 3. Flapping animation
-    const flapSpeed = 5 + energy * 15;
-    const flapAngle = Math.sin(t * flapSpeed + offset) * (0.4 + energy * 0.4);
-    wingLeftRef.current.rotation.z = flapAngle;
-    wingRightRef.current.rotation.z = -flapAngle;
-
-    // 4. Look at direction of travel (simplified)
+    // 3. Look at direction of travel
     const velocity = targetPos.current.clone().sub(currentPos.current);
     if (velocity.length() > 0.01) {
       const lookTarget = currentPos.current.clone().add(velocity.normalize().multiplyScalar(2));
       meshRef.current.lookAt(lookTarget);
     }
+
+    // 4. Adjust animation speed based on energy if applicable
+    if (actions && Object.values(actions)[0]) {
+      const action = Object.values(actions)[0];
+      if (action) {
+        action.timeScale = 1 + energy * 2;
+      }
+    }
   });
 
   return (
     <group ref={meshRef}>
-      {/* Body */}
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <coneGeometry args={[0.05, 0.2, 4]} />
-        <meshStandardMaterial color="#333" />
-      </mesh>
-      
-      {/* Wings */}
-      <mesh ref={wingLeftRef} position={[-0.05, 0, 0]}>
-        <planeGeometry args={[0.3, 0.1]} />
-        <meshStandardMaterial color="#555" side={THREE.DoubleSide} />
-      </mesh>
-      <mesh ref={wingRightRef} position={[0.05, 0, 0]}>
-        <planeGeometry args={[0.3, 0.1]} />
-        <meshStandardMaterial color="#555" side={THREE.DoubleSide} />
-      </mesh>
+      <primitive object={clonedScene} scale={0.5} />
     </group>
   );
 }
@@ -94,3 +96,5 @@ export function Flock() {
     </group>
   );
 }
+
+useGLTF.preload(MODEL_PATHS.BIRD);
