@@ -3,6 +3,7 @@ import { ARScene } from './components/ARScene';
 import { useStore } from './store';
 import { AudioExperience } from '../components/AudioExperience';
 import { CameraBackground } from '../components/CameraBackground';
+import { EnergyDebug } from '../components/EnergyDebug';
 import { SOUND_PATHS } from '../constants/assets';
 import {
   DebugColorInput,
@@ -40,6 +41,7 @@ export default function Scene3({
   return (
     <div className="w-full h-full bg-black relative overflow-hidden font-sans">
       <CameraBackground />
+      <EnergyDebug />
 
       <AudioExperience
         backgroundUrl={SOUND_PATHS.SKY_BG}

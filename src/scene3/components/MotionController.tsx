@@ -14,6 +14,7 @@ export function MotionController() {
     const checkMotionSupport = () => {
       const hasDeviceMotion = 'DeviceMotionEvent' in window;
       const hasDeviceOrientation = 'DeviceOrientationEvent' in window;
+      console.log('Motion support check:', { hasDeviceMotion, hasDeviceOrientation });
       return hasDeviceMotion || hasDeviceOrientation;
     };
 
@@ -24,9 +25,11 @@ export function MotionController() {
     }
 
     const requestMotionPermission = async () => {
+      console.log('Requesting motion permission...');
       if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
         try {
           const permission = await (DeviceMotionEvent as any).requestPermission();
+          console.log('Motion permission result:', permission);
           setMotionPermission(permission);
           setShowPermissionPrompt(false);
         } catch (error) {
@@ -35,6 +38,7 @@ export function MotionController() {
           setShowPermissionPrompt(false);
         }
       } else {
+        console.log('Motion permission not required (non-iOS or already granted)');
         setMotionPermission('granted');
         setShowPermissionPrompt(false);
       }
@@ -46,6 +50,7 @@ export function MotionController() {
     };
 
     const handleDeviceMotion = (e: DeviceMotionEvent) => {
+      console.log('Device motion event:', e.rotationRate);
       if (e.rotationRate) {
         const movement = 
           Math.abs(e.rotationRate.alpha || 0) + 
@@ -62,11 +67,21 @@ export function MotionController() {
           Math.abs(e.beta - lastOrientation.beta) + 
           Math.abs(e.gamma - lastOrientation.gamma);
         
+        console.log('Device orientation movement:', movement);
         if (movement > 1) {
           addEnergy(movement * 0.002);
         }
         
         setLastOrientation({ alpha: e.alpha, beta: e.beta, gamma: e.gamma });
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        // Touch doesn't have movementX/movementY, so we'll add energy based on touch presence
+        console.log('Touch movement detected');
+        addEnergy(0.5);
       }
     };
 
@@ -85,6 +100,9 @@ export function MotionController() {
       window.addEventListener('deviceorientation', handleDeviceOrientation);
     }
     
+    // Always add touch events as fallback
+    window.addEventListener('touchmove', handleTouchMove);
+    
     if (motionPermission === 'prompt') {
       window.addEventListener('click', handleUserInteraction);
       window.addEventListener('touchstart', handleUserInteraction);
@@ -94,6 +112,7 @@ export function MotionController() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('devicemotion', handleDeviceMotion);
       window.removeEventListener('deviceorientation', handleDeviceOrientation);
+      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('click', handleUserInteraction);
       window.removeEventListener('touchstart', handleUserInteraction);
     };
