@@ -44,6 +44,12 @@ export function MotionController() {
       }
     };
 
+    // Auto-request permission on mount
+    if (motionPermission === 'prompt') {
+      console.log('Auto-requesting motion permission...');
+      requestMotionPermission();
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       const movement = Math.abs(e.movementX) + Math.abs(e.movementY);
       addEnergy(movement * 0.0005);
@@ -94,18 +100,22 @@ export function MotionController() {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    console.log('Mouse event listener added');
     
     if (motionPermission !== 'denied') {
       window.addEventListener('devicemotion', handleDeviceMotion);
       window.addEventListener('deviceorientation', handleDeviceOrientation);
+      console.log('Device motion and orientation event listeners added');
     }
     
     // Always add touch events as fallback
     window.addEventListener('touchmove', handleTouchMove);
+    console.log('Touch move event listener added');
     
     if (motionPermission === 'prompt') {
       window.addEventListener('click', handleUserInteraction);
       window.addEventListener('touchstart', handleUserInteraction);
+      console.log('User interaction listeners added for permission prompt');
     }
 
     return () => {

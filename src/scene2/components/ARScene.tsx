@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Meadow } from './Meadow';
-import { MotionController } from './MotionController';
+import { MotionControllerSafe } from './MotionControllerSafe';
 import { useStore } from '../store';
 
 export function ARScene() {
@@ -8,7 +8,7 @@ export function ARScene() {
 
   return (
     <>
-      <MotionController />
+      <MotionControllerSafe />
 
       <ambientLight intensity={debugConfig.ambientLightIntensity} />
       <directionalLight

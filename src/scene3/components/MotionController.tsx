@@ -12,10 +12,15 @@ export function MotionController() {
 
   useEffect(() => {
     const checkMotionSupport = () => {
-      const hasDeviceMotion = 'DeviceMotionEvent' in window;
-      const hasDeviceOrientation = 'DeviceOrientationEvent' in window;
-      console.log('Motion support check:', JSON.stringify({ hasDeviceMotion, hasDeviceOrientation }));
-      return hasDeviceMotion || hasDeviceOrientation;
+      try {
+        const hasDeviceMotion = 'DeviceMotionEvent' in window;
+        const hasDeviceOrientation = 'DeviceOrientationEvent' in window;
+        console.log('Motion support check:', JSON.stringify({ hasDeviceMotion, hasDeviceOrientation }));
+        return hasDeviceMotion || hasDeviceOrientation;
+      } catch (error) {
+        console.error('Error checking motion support:', error);
+        return false;
+      }
     };
 
     if (!checkMotionSupport()) {
@@ -25,24 +30,36 @@ export function MotionController() {
     }
 
     const requestMotionPermission = async () => {
-      console.log('Requesting motion permission...');
-      if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
-        try {
-          const permission = await (DeviceMotionEvent as any).requestPermission();
-          console.log('Motion permission result:', permission);
-          setMotionPermission(permission);
-          setShowPermissionPrompt(false);
-        } catch (error) {
-          console.error('Error requesting device motion permission:', error);
-          setMotionPermission('denied');
+      try {
+        console.log('Requesting motion permission...');
+        if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
+          try {
+            const permission = await (DeviceMotionEvent as any).requestPermission();
+            console.log('Motion permission result:', permission);
+            setMotionPermission(permission);
+            setShowPermissionPrompt(false);
+          } catch (error) {
+            console.error('Error requesting device motion permission:', error);
+            setMotionPermission('denied');
+            setShowPermissionPrompt(false);
+          }
+        } else {
+          console.log('Motion permission not required (non-iOS or already granted)');
+          setMotionPermission('granted');
           setShowPermissionPrompt(false);
         }
-      } else {
-        console.log('Motion permission not required (non-iOS or already granted)');
-        setMotionPermission('granted');
+      } catch (error) {
+        console.error('Unexpected error in requestMotionPermission:', error);
+        setMotionPermission('denied');
         setShowPermissionPrompt(false);
       }
     };
+
+    // Auto-request permission on mount
+    if (motionPermission === 'prompt') {
+      console.log('Auto-requesting motion permission...');
+      requestMotionPermission();
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
       const movement = Math.abs(e.movementX) + Math.abs(e.movementY);
@@ -94,18 +111,22 @@ export function MotionController() {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    console.log('Mouse event listener added');
     
     if (motionPermission !== 'denied') {
       window.addEventListener('devicemotion', handleDeviceMotion);
       window.addEventListener('deviceorientation', handleDeviceOrientation);
+      console.log('Device motion and orientation event listeners added');
     }
     
     // Always add touch events as fallback
     window.addEventListener('touchmove', handleTouchMove);
+    console.log('Touch move event listener added');
     
     if (motionPermission === 'prompt') {
       window.addEventListener('click', handleUserInteraction);
       window.addEventListener('touchstart', handleUserInteraction);
+      console.log('User interaction listeners added for permission prompt');
     }
 
     return () => {
