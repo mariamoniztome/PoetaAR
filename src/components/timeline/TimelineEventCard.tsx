@@ -12,7 +12,7 @@ export default function TimelineEventCard({ event, index }: TimelineEventCardPro
 
   return (
     <motion.div
-      className={`flex w-full mb-24 items-center ${isEven ? 'flex-row' : 'flex-row-reverse'}`}
+      className={`flex w-full mb-24 items-center flex-col gap-8 md:gap-0 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
@@ -27,7 +27,7 @@ export default function TimelineEventCard({ event, index }: TimelineEventCardPro
       }}
     >
       {/* Year & Content */}
-      <div className={`w-1/2 px-8 md:px-16 ${isEven ? 'text-right' : 'text-left'}`}>
+      <div className={`w-full md:w-1/2 px-6 md:px-16 ${isEven ? 'text-left md:text-right' : 'text-left'}`}>
         <motion.span 
           variants={{
             hidden: { opacity: 0, y: 20 },
@@ -58,7 +58,7 @@ export default function TimelineEventCard({ event, index }: TimelineEventCardPro
       </div>
 
       {/* Visual Indicator */}
-      <div className="relative flex flex-col items-center justify-center">
+      <div className="relative hidden md:flex flex-col items-center justify-center">
         <div className="w-px h-32 bg-black/5 absolute -top-16" />
         <motion.div 
           variants={{
@@ -71,7 +71,7 @@ export default function TimelineEventCard({ event, index }: TimelineEventCardPro
       </div>
 
       {/* Image */}
-      <div className={`w-1/2 px-8 md:px-16 flex ${isEven ? 'justify-start' : 'justify-end'}`}>
+      <div className={`w-full md:w-1/2 px-6 md:px-16 flex justify-center ${isEven ? 'md:justify-start' : 'md:justify-end'}`}>
         <motion.div 
           variants={{
             hidden: { opacity: 0, scale: 0.9, rotate: isEven ? -2 : 2 },

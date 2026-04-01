@@ -3,7 +3,7 @@ import { Volume2, VolumeX } from 'lucide-react';
 
 interface AudioExperienceProps {
   backgroundUrl: string;
-  narrationUrl: string;
+  narrationUrl?: string;
   autoPlay?: boolean;
 }
 
@@ -25,18 +25,23 @@ export function AudioExperience({
     bgAudio.volume = 0.4;
     bgAudioRef.current = bgAudio;
 
-    // 2. Initialize Narration Audio
-    const narrationAudio = new Audio(narrationUrl);
-    narrationAudio.loop = false;
-    narrationAudio.volume = 1.0;
-    narrationAudioRef.current = narrationAudio;
+    // 2. Initialize optional narration audio
+    const hasNarration = Boolean(narrationUrl);
+    const narrationAudio = hasNarration ? new Audio(narrationUrl) : null;
+    if (narrationAudio) {
+      narrationAudio.loop = false;
+      narrationAudio.volume = 1.0;
+      narrationAudioRef.current = narrationAudio;
 
-    // Handle narration end to restore volume
-    narrationAudio.onended = () => {
-      if (bgAudioRef.current) {
-        bgAudioRef.current.volume = 0.4;
-      }
-    };
+      // Restore background volume when narration ends
+      narrationAudio.onended = () => {
+        if (bgAudioRef.current) {
+          bgAudioRef.current.volume = 0.4;
+        }
+      };
+    } else {
+      narrationAudioRef.current = null;
+    }
 
     if (autoPlay) {
       const startExperience = () => {
@@ -52,7 +57,7 @@ export function AudioExperience({
                 bgAudio.volume = 0.15;
                 
                 // Start narration
-                narrationAudio.play()
+                narrationAudioRef.current.play()
                   .then(() => setNarrationStarted(true))
                   .catch(err => console.error("Narration failed:", err));
               }
@@ -72,15 +77,15 @@ export function AudioExperience({
       return () => {
         window.removeEventListener('click', startExperience);
         bgAudio.pause();
-        narrationAudio.pause();
+        narrationAudio?.pause();
         bgAudio.src = "";
-        narrationAudio.src = "";
+        if (narrationAudio) narrationAudio.src = "";
       };
     }
 
     return () => {
       bgAudio.pause();
-      narrationAudio.pause();
+      narrationAudio?.pause();
     };
   }, [backgroundUrl, narrationUrl, autoPlay]);
 

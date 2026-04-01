@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+body {
+  overflow-x: hidden;
+}
+
 @theme {
   --font-serif: Georgia, "Times New Roman", serif;
   --font-handwritten: "Brush Script MT", "Segoe Script", cursive;
