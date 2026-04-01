@@ -3,17 +3,36 @@ import { Ocean } from './Ocean';
 import { FloatingObject } from './FloatingObject';
 import { MotionController } from './MotionController';
 import { MODEL_PATHS } from '../../constants/assets';
+import { useStore } from '../store';
 
 export function ARScene({ modelUrl = MODEL_PATHS.FLOATING_OBJECT }: { modelUrl?: string }) {
+  const debugConfig = useStore((state) => state.debugConfig);
+
   return (
     <>
       <MotionController />
-      <ambientLight intensity={0.8} />
-      <directionalLight position={[10, 10, 5]} intensity={1.5} castShadow color="#ffffff" />
-      
+      <ambientLight intensity={debugConfig.ambientLightIntensity} />
+      <directionalLight
+        position={debugConfig.directionalLightPosition}
+        intensity={debugConfig.directionalLightIntensity}
+        castShadow
+        color={debugConfig.directionalLightColor}
+      />
+
       <Suspense fallback={null}>
         <Ocean />
-        <FloatingObject modelUrl={modelUrl} />
+        {Array.from({ length: debugConfig.objectCount }).map((_, index) => {
+          const angle = (index / Math.max(debugConfig.objectCount, 1)) * Math.PI * 2;
+          const radius = debugConfig.objectCount <= 1 ? 0 : debugConfig.objectSpread;
+          const x = Math.cos(angle) * radius;
+          const z = Math.sin(angle) * radius;
+
+          return (
+            <group key={index} position={[x, 0, z]}>
+              <FloatingObject modelUrl={modelUrl} />
+            </group>
+          );
+        })}
       </Suspense>
     </>
   );

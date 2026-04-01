@@ -1,59 +1,117 @@
-import { Suspense, useMemo } from 'react';
-import { Clouds, Cloud, useGLTF } from '@react-three/drei';
+import { memo, Suspense, useMemo, useRef } from 'react';
+import { Clouds, Cloud } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import { Flock } from './Flock';
 import { MotionController } from './MotionController';
 import * as THREE from 'three';
-import { MODEL_PATHS } from '../../constants/assets';
+import { useStore } from '../store';
 
-function CustomCloud({ position, scale = 1 }: { position: [number, number, number], scale?: number }) {
-  const { scene } = useGLTF(MODEL_PATHS.CLOUD);
-  const clonedScene = useMemo(() => scene.clone(), [scene]);
-  
+function ProceduralCloudField() {
+  const debugConfig = useStore((state) => state.debugConfig);
+  const cloudRefs = useRef<Array<THREE.Group | null>>([]);
+  const cloudTimeRef = useRef(0);
+
+  const hash01 = (seed: number) => {
+    const x = Math.sin(seed * 127.1) * 43758.5453123;
+    return x - Math.floor(x);
+  };
+
+  const cloudSeeds = useMemo(
+    () =>
+      Array.from({ length: debugConfig.cloudCount }).map((_, index) => ({
+        baseX: -10 + index * 5,
+        baseY: -1.8 + (index % 3) * 0.8,
+        baseZ: -8 - index * 2.5,
+        phase: hash01(index + 1) * Math.PI * 2,
+        speedFactor: 0.8 + hash01(index + 101) * 0.6,
+        volume: 4 + hash01(index + 1001) * 3,
+      })),
+    [debugConfig.cloudCount]
+  );
+
+  useFrame((_, delta) => {
+    const liveConfig = useStore.getState().debugConfig;
+    const clampedDelta = Math.min(delta, 1 / 30);
+    cloudTimeRef.current += clampedDelta;
+
+    const t = cloudTimeRef.current;
+    const angle = (liveConfig.cloudMoveDirectionDeg * Math.PI) / 180;
+    const dirX = Math.cos(angle);
+    const dirZ = Math.sin(angle);
+    const shouldMove =
+      liveConfig.cloudMotionEnabled &&
+      liveConfig.cloudMoveSpeed > 0.0001 &&
+      liveConfig.cloudMoveAmplitude > 0.0001;
+
+    for (let i = 0; i < cloudSeeds.length; i++) {
+      const node = cloudRefs.current[i];
+      if (!node) continue;
+
+      const seed = cloudSeeds[i];
+      if (!shouldMove) {
+        node.position.x = seed.baseX;
+        node.position.y = seed.baseY;
+        node.position.z = seed.baseZ;
+        continue;
+      }
+
+      const offset =
+        Math.sin(t * liveConfig.cloudMoveSpeed * seed.speedFactor + seed.phase) *
+        liveConfig.cloudMoveAmplitude;
+
+      node.position.x = seed.baseX + dirX * offset;
+      node.position.y = seed.baseY;
+      node.position.z = seed.baseZ + dirZ * offset;
+    }
+  });
+
   return (
-    <primitive 
-      object={clonedScene} 
-      position={position} 
-      scale={scale} 
-    />
+    <Clouds material={THREE.MeshStandardMaterial}>
+      {cloudSeeds.map((seed, index) => (
+        <group
+          key={index}
+          ref={(node) => {
+            cloudRefs.current[index] = node;
+          }}
+          position={[seed.baseX, seed.baseY, seed.baseZ]}
+        >
+          <Cloud
+            segments={35}
+            bounds={[
+              10 * debugConfig.cloudScaleMultiplier,
+              2 * debugConfig.cloudScaleMultiplier,
+              10 * debugConfig.cloudScaleMultiplier,
+            ]}
+            volume={seed.volume * debugConfig.cloudScaleMultiplier}
+            color={debugConfig.proceduralCloudColor}
+            speed={0}
+            opacity={debugConfig.proceduralCloudOpacity}
+          />
+        </group>
+      ))}
+    </Clouds>
   );
 }
 
-export function ARScene() {
+export const ARScene = memo(function ARScene() {
+  const debugConfig = useStore((state) => state.debugConfig);
+
   return (
     <>
       <MotionController />
-      
-      {/* Lighting for a bright day in the sky */}
-      <ambientLight intensity={1.0} />
-      <directionalLight 
-        position={[5, 10, 5]} 
-        intensity={1.5} 
-        castShadow 
+
+      <ambientLight intensity={debugConfig.ambientLightIntensity} />
+      <directionalLight
+        position={debugConfig.directionalLightPosition}
+        intensity={debugConfig.directionalLightIntensity}
+        color={debugConfig.directionalLightColor}
+        castShadow
       />
-      
+
       <Suspense fallback={null}>
         <Flock />
-        
-        {/* Custom 3D Clouds */}
-        <CustomCloud position={[-5, 2, -12]} scale={2} />
-        <CustomCloud position={[8, 0, -15]} scale={1.5} />
-        <CustomCloud position={[0, 4, -20]} scale={3} />
-
-        {/* Procedural clouds as background depth */}
-        <Clouds material={THREE.MeshStandardMaterial}>
-          <Cloud 
-            segments={20} 
-            bounds={[10, 2, 10]} 
-            volume={6} 
-            color="#ffffff" 
-            position={[0, -2, -10]} 
-            speed={0.1}
-            opacity={0.3}
-          />
-        </Clouds>
+        <ProceduralCloudField />
       </Suspense>
     </>
   );
-}
-
-useGLTF.preload(MODEL_PATHS.CLOUD);
+});

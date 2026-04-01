@@ -3,8 +3,7 @@ const soundUrl = (fileName: string) => new URL(`../assets/sound/${fileName}`, im
 
 export const MODEL_PATHS = {
   // Scene 1: Ocean & Floating Object
-  FLOATING_OBJECT: modelUrl('field.glb'),
-  CLOUD: modelUrl('flower1.glb'),
+  FLOATING_OBJECT: modelUrl('lighthouse.glb'),
 
   // Scene 2: Meadow
   FLOWER: modelUrl('flowers.glb'),
@@ -17,11 +16,11 @@ export const MODEL_PATHS = {
 
 export const SOUND_PATHS = {
   // Scene 1: Sea
-  SEA_BG: soundUrl('poem1.mp3'),
+  SEA_BG: soundUrl('poem2.mp3'),
   SEA_NARRATION: '',
   
   // Scene 2: Field
-  FIELD_BG: soundUrl('poem2.mp3'),
+  FIELD_BG: soundUrl('poem1.mp3'),
   FIELD_NARRATION: '',
   
   // Scene 3: Sky
