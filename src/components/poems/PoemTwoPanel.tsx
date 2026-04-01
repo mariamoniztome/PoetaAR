@@ -9,30 +9,56 @@ interface PoemPanelProps {
 export default function PoemTwoPanel({ poem }: PoemPanelProps) {
   return (
     <motion.section
-      className="h-screen w-full flex flex-col items-center justify-center bg-[#f0f0f5] relative overflow-hidden"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 1.2 }}
+      className="min-h-screen w-full flex flex-col items-center justify-center bg-[#f9f7f2] relative overflow-hidden py-32"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 1.5, staggerChildren: 0.15 } }
+      }}
     >
       {/* Background Texture Overlay */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]" />
+      <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]" />
+      
+      {/* Decorative Lines */}
+      <div className="absolute inset-0 flex justify-between px-20 pointer-events-none opacity-[0.05]">
+        <div className="w-px h-full bg-black" />
+        <div className="w-px h-full bg-black" />
+      </div>
 
       {/* Poem Content */}
-      <div className="max-w-xl px-8 relative z-10 text-center">
-        <span className="font-serif italic text-6xl opacity-10 absolute -top-12 -right-12 select-none">
+      <div className="max-w-2xl px-8 relative z-10 text-center">
+        <motion.span 
+          variants={{
+            hidden: { opacity: 0, scale: 0.5 },
+            visible: { opacity: 0.1, scale: 1 }
+          }}
+          className="font-serif italic text-[12rem] absolute -top-24 left-1/2 -translate-x-1/2 select-none pointer-events-none"
+        >
           {poem.marker.roman}
-        </span>
-        <h2 className="text-4xl font-serif mb-8 tracking-tight">{poem.title}</h2>
-        <div className="space-y-4">
+        </motion.span>
+        
+        <motion.h2 
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0 }
+          }}
+          className="text-4xl md:text-5xl font-serif mb-12 tracking-tight text-brand-red"
+        >
+          {poem.title}
+        </motion.h2>
+
+        <div className="space-y-6">
           {poem.verses.map((verse, idx) => (
             <motion.p
               key={idx}
-              className="text-xl font-serif italic text-black/80"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.4 + idx * 0.2 }}
+              className="text-2xl md:text-3xl font-serif italic text-black/80 leading-snug"
+              variants={{
+                hidden: { opacity: 0, y: 15 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             >
               {verse}
             </motion.p>
@@ -41,10 +67,16 @@ export default function PoemTwoPanel({ poem }: PoemPanelProps) {
       </div>
 
       {/* Subtle Marker Label */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-40">
-        <div className="w-px h-12 bg-black mb-4" />
-        <span className="text-[10px] uppercase tracking-[0.3em] font-mono">{poem.marker.label}</span>
-      </div>
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 0.4, y: 0 }
+        }}
+        className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center"
+      >
+        <div className="w-px h-16 bg-black mb-4" />
+        <span className="text-[10px] uppercase tracking-[0.4em] font-sans">{poem.marker.label}</span>
+      </motion.div>
     </motion.section>
   );
 }
