@@ -1,1 +1,16 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Dancing+Script:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+
+@theme {
+  --font-serif: "Playfair Display", serif;
+  --font-handwritten: "Dancing Script", cursive;
+  --font-sans: "Inter", sans-serif;
+  --color-brand-red: #7a0b0b;
+  --color-brand-cream: #f9f7f2;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-cream text-black antialiased;
+  }
+}
