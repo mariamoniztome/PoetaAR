@@ -14,7 +14,7 @@ export function MotionController() {
     const checkMotionSupport = () => {
       const hasDeviceMotion = 'DeviceMotionEvent' in window;
       const hasDeviceOrientation = 'DeviceOrientationEvent' in window;
-      console.log('Motion support check:', { hasDeviceMotion, hasDeviceOrientation });
+      console.log('Motion support check:', JSON.stringify({ hasDeviceMotion, hasDeviceOrientation }));
       return hasDeviceMotion || hasDeviceOrientation;
     };
 
@@ -50,7 +50,7 @@ export function MotionController() {
     };
 
     const handleDeviceMotion = (e: DeviceMotionEvent) => {
-      console.log('Device motion event:', e.rotationRate);
+      console.log('Device motion event:', JSON.stringify(e.rotationRate));
       if (e.rotationRate) {
         const movement = 
           Math.abs(e.rotationRate.alpha || 0) + 
