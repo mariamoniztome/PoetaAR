@@ -96,12 +96,17 @@ export function DebugNumberInput({
 }: DebugNumberInputProps) {
   const [textValue, setTextValue] = useState(String(value));
 
+  const parseNumeric = (raw: string) => {
+    const normalized = raw.replace(',', '.').trim();
+    return Number(normalized);
+  };
+
   useEffect(() => {
     setTextValue(String(value));
   }, [value]);
 
   const commitValue = (raw: string) => {
-    const parsed = Number(raw);
+    const parsed = parseNumeric(raw);
     if (Number.isFinite(parsed)) {
       onChange(parsed);
     } else {
@@ -122,7 +127,7 @@ export function DebugNumberInput({
         onChange={(e) => {
           const raw = e.target.value;
           setTextValue(raw);
-          const parsed = Number(raw);
+          const parsed = parseNumeric(raw);
           if (Number.isFinite(parsed)) {
             onChange(parsed);
           }
