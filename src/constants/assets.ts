@@ -10,7 +10,7 @@ export const MODEL_PATHS = {
   CLOUD: '/assets/models/cloud.glb',
   
   // Scene 2: Meadow
-  FLOWER: '/assets/models/flower.glb',
+  FLOWER: '/assets/models/flowers.glb',
   GRASS: '/assets/models/grass.glb',
   
   // Scene 3: Flock
