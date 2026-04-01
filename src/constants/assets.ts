@@ -6,7 +6,7 @@ export const MODEL_PATHS = {
   FLOATING_OBJECT: modelUrl('lighthouse.glb'),
 
   // Scene 2: Meadow
-  FLOWER: modelUrl('flower1.glb'),
+  FLOWER: modelUrl('flower.glb'),
 
   // Scene 3: Flock
   BIRD: modelUrl('bird.glb'),
