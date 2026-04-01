@@ -69,7 +69,7 @@ export default function PoemOnePanel({ poem }: PoemPanelProps) {
         </div>
       </div>
 
-      {/* Subtle Marker Label */}
+      {/* Subtle Marker Label
       <motion.div 
         variants={{
           hidden: { opacity: 0, y: 20 },
@@ -79,7 +79,7 @@ export default function PoemOnePanel({ poem }: PoemPanelProps) {
       >
         <div className="w-px h-16 bg-black mb-4" />
         <span className="text-[10px] uppercase tracking-[0.4em] font-sans">{poem.marker.label}</span>
-      </motion.div>
+      </motion.div> */}
     </motion.section>
   );
 }

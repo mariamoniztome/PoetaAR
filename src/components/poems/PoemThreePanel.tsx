@@ -71,8 +71,8 @@ export default function PoemThreePanel({ poem }: PoemPanelProps) {
         }}
         className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center"
       >
-        <div className="w-px h-16 bg-black mb-4" />
-        <span className="text-[10px] uppercase tracking-[0.4em] font-sans">{poem.marker.label}</span>
+        {/* <div className="w-px h-16 bg-black mb-4" /> */}
+        {/* <span className="text-[10px] uppercase tracking-[0.4em] font-sans">{poem.marker.label}</span> */}
       </motion.div>
     </motion.section>
   );

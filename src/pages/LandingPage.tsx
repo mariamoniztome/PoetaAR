@@ -39,7 +39,7 @@ export default function LandingPage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white">
+    <main className="relative min-h-screen bg-white text-black font-sans overflow-x-hidden selection:bg-black selection:text-white">
       {/* Main Timeline Screen */}
       <TimelineScreen 
         texts={content.texts} 
@@ -49,7 +49,7 @@ export default function LandingPage() {
 
       {/* QR Scanner Overlay */}
       {isScannerOpen && (
-        <div className="fixed inset-0 z-[200] bg-black flex flex-col">
+        <div className="fixed inset-0 z-200 bg-black flex flex-col">
           <div className="p-6 flex justify-between items-center text-white z-10">
             <div className="flex items-center gap-3">
               <QrCode className="w-6 h-6" />
@@ -76,7 +76,7 @@ export default function LandingPage() {
       {/* Markers Link (Hidden but accessible for testing/printing) */}
       <Link 
         to="/markers" 
-        className="fixed bottom-6 right-6 z-[150] p-3 bg-white/80 backdrop-blur-sm border border-black/10 rounded-full opacity-20 hover:opacity-100 transition-opacity"
+        className="fixed bottom-6 right-6 z-150 p-3 bg-white/80 backdrop-blur-sm border border-black/10 rounded-full opacity-20 hover:opacity-100 transition-opacity"
         title="Ver Marcadores"
       >
         <QrCode className="w-5 h-5" />

@@ -8,61 +8,61 @@
         "year": "1886",
         "title": "Nasce em Vilar",
         "desc": "Joaquim Moreira da Silva nasce a 15 de marco, em Vilar. A infancia, marcada pelo trabalho rural, vai influenciar o tom popular dos seus versos.",
-        "imageA": "https://picsum.photos/seed/vilar/400/300"
+        "imageA": "src/assets/img/casa.jpeg"
       },
       {
         "year": "1890",
         "title": "A Foicinha e o Olho",
         "desc": "Ainda jovem, num episodio num adro festivo, perde parcialmente a visao de um olho. O acontecimento atravessa a memoria oral da comunidade.",
-        "imageB": "https://picsum.photos/seed/eye/400/300"
+        "imageB": "src/assets/img/36anos.png"
       },
       {
         "year": "1904",
         "title": "Porto: Oficio e Leitura",
         "desc": "Com cerca de 18 anos vai para o Porto, aprende carpintaria e frequenta escola noturna. A leitura autodidata passa a ser parte central da sua formacao.",
-        "imageA": "https://picsum.photos/seed/porto/400/300"
+        "imageA": "src/assets/img/escola.png"
       },
       {
         "year": "1910",
         "title": "Republica e Voz Militante",
         "desc": "No contexto da implantacao da Republica, aproxima-se do meio anarco-sindicalista e usa a poesia como instrumento de critica social.",
-        "imageB": "https://picsum.photos/seed/republica/400/300"
+        "imageB": "src/assets/img/republica.jpeg"
       },
       {
         "year": "1910-1930",
         "title": "Folhas Volantes e Oralidade",
         "desc": "Os poemas circulam em folhetos de pequena tiragem e em desafios cantados. Muito da sua obra sobrevive pela transmissao oral entre familias e vizinhos.",
-        "imageA": "https://picsum.photos/seed/folhas/400/300"
+        "imageA": "src/assets/img/capa_livro.jpg"
       },
       {
         "year": "1930s",
         "title": "Resistencia no Estado Novo",
         "desc": "Durante o Estado Novo, e perseguido e preso. Mantem os ideais libertarios, continuando a escrever e a cantar em contexto popular.",
-        "imageB": "https://picsum.photos/seed/resistencia/400/300"
+        "imageB": "src/assets/img/resistencia.jpeg"
       },
       {
         "year": "1960",
         "title": "Morte e Cortejo Popular",
         "desc": "Morre a 12 de dezembro, aos 74 anos. O funeral torna-se um gesto coletivo de reconhecimento por parte da populacao de Vila do Conde.",
-        "imageA": "https://picsum.photos/seed/morte/400/300"
+        "imageA": "src/assets/img/campa.jpeg"
       },
       {
         "year": "1967",
         "title": "A Lira do Povo",
         "desc": "Sai a primeira edicao postuma de A Lira do Povo, fixando em livro uma parte essencial da obra que circulava dispersa.",
-        "imageB": "https://picsum.photos/seed/lira/400/300"
+        "imageB": "src/assets/img/lira.jpg"
       },
       {
         "year": "2024",
         "title": "Nova Antologia",
         "desc": "A Opera Omnia publica A Lira Dileta e A Lira da Rebeldia, reativando o interesse critico e editorial em torno do Poeta Carpinteiro.",
-        "imageA": "https://picsum.photos/seed/antologia/400/300"
+        "imageA": "src/assets/img/antologia.jpeg"
       },
       {
         "year": "2026",
         "title": "140 Anos: Programa Expandido",
         "desc": "As celebracoes dos 140 anos cruzam escola, exposicao, teatro e percurso poetico, aproximando novas geracoes da sua obra e biografia.",
-        "imageB": "https://picsum.photos/seed/140anos/400/300"
+        "imageB": "src/assets/img/familia.jpg"
       }
     ],
     "ctaLabel": "Explora o mundo do poeta",
@@ -71,7 +71,7 @@
   "poems": [
     {
       "id": "poem-1",
-      "title": "Poema I · O Poeta e Vilar",
+      "title": "O Poeta e Vilar",
       "verses": [
         "Assim como os passarinhos",
         "Nasceram para voar",
@@ -86,7 +86,7 @@
     },
     {
       "id": "poem-2",
-      "title": "Poema II · As Letras e o Farol",
+      "title": "As Letras e o Farol",
       "verses": [
         "Nas letras do alfabeto",
         "Ha um imenso farol",
@@ -101,7 +101,7 @@
     },
     {
       "id": "poem-3",
-      "title": "Poema III · A Rebeldia e o Povo",
+      "title": "A Rebeldia e o Povo",
       "verses": [
         "No campo por entre as flores",
         "Com alegres ceifeiras",

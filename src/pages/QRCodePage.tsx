@@ -18,10 +18,10 @@ export default function QRCodePage() {
   if (!texts) return null;
 
   return (
-    <div className="w-full min-h-screen bg-[#f5f5f0] text-black flex flex-col items-center p-6 md:p-12 font-sans selection:bg-black selection:text-white">
+    <div className="overflow-hidden w-full min-h-screen bg-[#f5f5f0] text-black flex flex-col items-center font-sans selection:bg-black selection:text-white">
       <div className="max-w-5xl w-full space-y-16">
         {/* Header */}
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-black/10 pb-12">
+        <header className="pt-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="space-y-4">
             <Link 
               to="/"
@@ -33,9 +33,9 @@ export default function QRCodePage() {
             <h1 className="text-6xl font-serif tracking-tighter leading-none">
               {texts.markersPage.title}
             </h1>
-            <p className="text-sm font-mono uppercase tracking-[0.2em] opacity-40">
+            {/* <p className="text-sm font-mono uppercase tracking-[0.2em] opacity-40">
               {texts.markersPage.subtitle}
-            </p>
+            </p> */}
           </div>
           
           <button 
@@ -48,7 +48,7 @@ export default function QRCodePage() {
         </header>
 
         {/* Instructions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 py-8 border-b border-black/10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 border-black/10">
           <div className="space-y-2">
             <span className="font-mono text-[10px] opacity-30 uppercase tracking-widest">Passo 01</span>
             <p className="text-sm leading-relaxed">{texts.markersPage.instructionLine1}</p>
@@ -68,11 +68,11 @@ export default function QRCodePage() {
           {texts.poems.map((poem, index) => (
             <div 
               key={poem.id}
-              className="flex flex-col items-center p-12 bg-white border border-black/5 shadow-sm space-y-8 print:shadow-none print:border-black/20"
+              className="flex flex-col items-center p-6 bg-white border border-black/5 shadow-sm space-y-4 print:shadow-none print:border-black/20"
             >
-              <div className="text-center space-y-2">
+              <div className="text-center space-y-1">
                 <span className="font-serif italic text-4xl opacity-20">{poem.marker.roman}</span>
-                <h3 className="font-serif text-2xl italic">{poem.marker.label}</h3>
+                {/* <h3 className="font-serif text-2xl italic">{poem.marker.label}</h3> */}
               </div>
               
               <div className="p-6 bg-white border border-black/5 rounded-sm shadow-inner">
@@ -83,16 +83,12 @@ export default function QRCodePage() {
                   includeMargin={false}
                 />
               </div>
-              
-              <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-center opacity-30">
-                {texts.markersPage.markerPrefix} {index + 1}
-              </p>
             </div>
           ))}
         </div>
 
         {/* Footer */}
-        <footer className="pt-24 pb-12 text-center opacity-20">
+        <footer className="text-center opacity-20">
           <p className="text-[10px] font-mono uppercase tracking-[0.5em]">
             {texts.markersPage.footer}
           </p>

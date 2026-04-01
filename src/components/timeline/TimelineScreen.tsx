@@ -5,6 +5,11 @@ import TimelineEventCard from './TimelineEventCard';
 import PoemOnePanel from '../poems/PoemOnePanel';
 import PoemTwoPanel from '../poems/PoemTwoPanel';
 import PoemThreePanel from '../poems/PoemThreePanel';
+import logotipoSvg from '../../assets/img/logotipo.svg';
+import heroSection from '../../assets/img/header.svg';
+import portrait from '../../assets/img/36anos.png';
+import poem from '../../assets/img/hero.svg';
+import logotipoSvg2 from '../../assets/img/logo2.svg';
 
 interface TimelineScreenProps {
   texts: AppTexts;
@@ -22,7 +27,7 @@ export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScre
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 0.05, scale: 1 }}
           transition={{ duration: 3, ease: "easeOut" }}
-          className="absolute -top-20 -right-20 w-[600px] h-[600px] rounded-full border border-black pointer-events-none"
+          className="absolute -top-20 -right-20 w-150 h-150 rounded-full border border-black pointer-events-none"
         />
 
         {/* Logo Top Left */}
@@ -32,22 +37,10 @@ export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScre
           transition={{ duration: 0.8 }}
           className="flex items-start justify-start mb-20 z-10"
         >
-          <div className="border border-black p-2 flex flex-col items-center justify-center text-[8px] leading-tight font-sans uppercase tracking-[0.2em] w-[140px] bg-white">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-6 h-6 border border-black flex items-center justify-center bg-black text-white">
-                <span className="text-[6px]">JMS</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold">JOAQUIM</span>
-                <span>MOREIRA DA SILVA</span>
-              </div>
-            </div>
-            <div className="w-full h-px bg-black my-1" />
-            <span>POETA CARPINTEIRO</span>
-          </div>
+          <img src={logotipoSvg} alt="140 anos do Poeta Carpinteiro Logo" className="w-40 h-16 object-contain" />
         </motion.div>
         
-        <div className="flex-1 flex flex-col justify-center relative z-10">
+        <div className="flex-1 flex flex-col justify-start relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -65,24 +58,10 @@ export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScre
             initial={{ opacity: 0, x: 50, rotate: 5 }}
             whileInView={{ opacity: 1, x: 0, rotate: 0 }}
             transition={{ duration: 1.5, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute bottom-10 right-0 md:right-20 flex flex-col items-center"
+            className="absolute bottom-0 right-20 flex flex-col items-center"
           >
-            <div className="relative w-64 h-64 flex items-center justify-center">
-              <svg viewBox="0 0 200 200" className="w-full h-full opacity-80 drop-shadow-sm">
-                <path d="M40,140 Q40,110 100,110 Q160,110 160,140 L170,150 Q170,170 100,170 Q30,170 30,150 Z" fill="none" stroke="black" strokeWidth="1" />
-                <path d="M110,110 Q110,80 140,80 Q150,80 150,110" fill="none" stroke="black" strokeWidth="1" />
-                <circle cx="140" cy="80" r="8" fill="none" stroke="black" strokeWidth="1" />
-                <path d="M145,75 L155,70" fill="none" stroke="black" strokeWidth="1" />
-              </svg>
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 1 }}
-                className="absolute -right-4 top-1/2 flex flex-col items-start font-handwritten text-3xl leading-none text-brand-red"
-              >
-                <span>nasci pra</span>
-                <span className="ml-8">ser poeta</span>
-              </motion.div>
+            <div className="relative w-full h-90 flex items-center justify-center">
+              <img src={heroSection} alt="Nasci para ser poeta" className="w-full h-full object-contain" />
             </div>
           </motion.div>
         </div>
@@ -113,12 +92,7 @@ export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScre
           transition={{ duration: 1.5 }}
           className="w-full md:w-1/2 flex justify-center md:justify-start mb-12 md:mb-0"
         >
-          <div className="w-[80%] max-w-[500px] aspect-[4/5] bg-gray-300 grayscale relative overflow-hidden shadow-2xl">
-            <div className="absolute inset-0 flex items-center justify-center text-black/20 font-serif text-2xl uppercase tracking-widest">
-              Retrato
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-red/20 to-transparent" />
-          </div>
+          <img src={portrait} alt="Retrato do Poeta Carpinteiro" className='w-96 h-auto' />
         </motion.div>
 
         <motion.div 
@@ -127,10 +101,7 @@ export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScre
           transition={{ duration: 1.2, delay: 0.5 }}
           className="w-full md:w-1/2 flex flex-col items-end text-right text-brand-cream font-serif italic text-3xl md:text-4xl leading-relaxed pr-0 md:pr-12"
         >
-          <p className="mb-2">Minha vida e minhas obras</p>
-          <p className="mb-2">Tudo numa colecção</p>
-          <p className="mb-2">Aqui ficam arquivadas</p>
-          <p>Escritas por minha mão</p>
+          <img src={poem} alt="Poema do Poeta Carpinteiro" className='w-full h-auto' />
         </motion.div>
       </section>
 
@@ -150,7 +121,6 @@ export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScre
         >
           <h2 className="text-6xl md:text-7xl font-serif mb-6 tracking-tight">Cronologia</h2>
           <div className="w-24 h-px bg-brand-red mx-auto mb-4" />
-          <p className="text-xs uppercase tracking-[0.5em] opacity-40">O percurso do mestre</p>
         </motion.div>
 
         <div className="relative">
@@ -160,7 +130,7 @@ export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScre
             whileInView={{ height: '100%' }}
             viewport={{ once: true }}
             transition={{ duration: 2, ease: "easeInOut" }}
-            className="absolute left-1/2 top-0 w-px bg-gradient-to-b from-brand-red/20 via-black/5 to-transparent -translate-x-1/2 hidden md:block" 
+            className="absolute left-1/2 top-0 w-px bg-linear-to-b from-brand-red/20 via-black/5 to-transparent -translate-x-1/2 hidden md:block" 
           />
           
           {texts.timelinePage.events.map((event, index) => (
@@ -203,17 +173,12 @@ export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScre
               onClick={onEnterAr}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-20 py-6 bg-brand-red text-brand-cream rounded-none font-serif text-3xl tracking-wide shadow-2xl relative z-10 overflow-hidden"
+              className="px-20 py-6 cursor-pointer bg-brand-red text-brand-cream rounded-none font-serif text-3xl tracking-wide shadow-2xl relative z-10 overflow-hidden"
             >
               <span className="relative z-10">Iniciar Experiência</span>
-              <motion.div 
-                className="absolute inset-0 bg-black/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"
-              />
+              
             </motion.button>
             
-            {/* Decorative corners */}
-            <div className="absolute -top-4 -left-4 w-8 h-8 border-t-2 border-l-2 border-brand-red opacity-0 group-hover:opacity-100 transition-all duration-500" />
-            <div className="absolute -bottom-4 -right-4 w-8 h-8 border-b-2 border-r-2 border-brand-red opacity-0 group-hover:opacity-100 transition-all duration-500" />
           </motion.div>
 
           <p className="mt-12 text-xs font-sans opacity-30 max-w-xs leading-relaxed uppercase tracking-widest">
@@ -223,14 +188,10 @@ export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScre
       </section>
 
       {/* Footer */}
-      <footer className="w-full bg-brand-red py-20 flex flex-col items-center justify-center">
-        <div className="w-20 h-20 border border-brand-cream/30 flex items-center justify-center mb-8">
-          <div className="w-12 h-12 border border-brand-cream/50 flex items-center justify-center text-brand-cream/50 text-[10px]">
-            LOGO
-          </div>
-        </div>
+      <footer className="w-full bg-brand-red py-10 flex flex-col items-center justify-center">
+        <img src={logotipoSvg2} alt="140 anos do Poeta Carpinteiro Logo" className="w-50 h-auto object-contain" />
         <p className="text-[10px] uppercase tracking-[0.5em] font-sans text-brand-cream/40">
-          © 2026 Poeta Carpinteiro • Experiência Imersiva
+          © 2026 Poeta Carpinteiro
         </p>
       </footer>
     </div>
