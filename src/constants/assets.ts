@@ -1,18 +1,14 @@
-/**
- * Centralized paths for 3D models.
- * Replace these paths with your actual .glb or .gltf files.
- * Example: '/assets/models/flower.glb'
- */
+const modelUrl = (fileName: string) => new URL(`../assets/models/${fileName}`, import.meta.url).href;
 
 export const MODEL_PATHS = {
   // Scene 1: Ocean & Floating Object
-  FLOATING_OBJECT: '/assets/models/floating_object.glb',
-  CLOUD: '/assets/models/cloud.glb',
-  
+  FLOATING_OBJECT: modelUrl('field.glb'),
+  CLOUD: modelUrl('flower1.glb'),
+
   // Scene 2: Meadow
-  FLOWER: '/assets/models/flowers.glb',
-  GRASS: '/assets/models/grass.glb',
-  
+  FLOWER: modelUrl('flowers.glb'),
+  GRASS: modelUrl('grass.glb'),
+
   // Scene 3: Flock
-  BIRD: '/assets/models/bird.glb',
+  BIRD: modelUrl('bird.glb'),
 };
