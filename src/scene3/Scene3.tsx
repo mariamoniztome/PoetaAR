@@ -4,6 +4,7 @@ import { useStore } from './store';
 import { AudioExperience } from '../components/AudioExperience';
 import { CameraBackground } from '../components/CameraBackground';
 import { EnergyDebug } from '../components/EnergyDebug';
+import { MobileLogger } from '../components/MobileLogger';
 import { SOUND_PATHS } from '../constants/assets';
 import {
   DebugColorInput,
@@ -42,6 +43,7 @@ export default function Scene3({
     <div className="w-full h-full bg-black relative overflow-hidden font-sans">
       <CameraBackground />
       <EnergyDebug />
+      <MobileLogger />
 
       <AudioExperience
         backgroundUrl={SOUND_PATHS.SKY_BG}
