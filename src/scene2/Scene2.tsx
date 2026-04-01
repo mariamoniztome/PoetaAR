@@ -20,8 +20,6 @@ export default function Scene2({
   title = 'Campo de Flores',
   description = 'Mexe o rato ou o telemovel para criar vento nas flores.',
 }: Scene2Props) {
-  const energy = useStore((state) => state.energy);
-  const targetEnergy = useStore((state) => state.targetEnergy);
   const debugConfig = useStore((state) => state.debugConfig);
   const setDebugConfig = useStore((state) => state.setDebugConfig);
   const resetDebugConfig = useStore((state) => state.resetDebugConfig);
@@ -42,25 +40,20 @@ export default function Scene2({
       />
 
       <Canvas
-        shadows
         camera={{ position: [0, 2, 5], fov: 60 }}
-        gl={{ alpha: true, antialias: true }}
+        gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
         className="z-10"
       >
         <ARScene />
       </Canvas>
 
-      <SceneDebugPanel
-        title="Debug Scene 2"
-        values={{ energy, targetEnergy, debugConfig }}
-        onReset={resetDebugConfig}
-      >
+      <SceneDebugPanel title="Debug Scene 2" values={{ debugConfig }} onReset={resetDebugConfig}>
         <DebugSection title="GLB Repeticao">
           <DebugNumberInput
             label="Flores"
             value={debugConfig.flowerCount}
             min={0}
-            max={400}
+            max={5000}
             step={1}
             onChange={(value) => setDebugConfig({ flowerCount: Math.round(value) })}
           />
@@ -68,7 +61,7 @@ export default function Scene2({
             label="Relva"
             value={debugConfig.grassCount}
             min={0}
-            max={600}
+            max={100000}
             step={1}
             onChange={(value) => setDebugConfig({ grassCount: Math.round(value) })}
           />
@@ -143,3 +136,4 @@ export default function Scene2({
     </div>
   );
 }
+

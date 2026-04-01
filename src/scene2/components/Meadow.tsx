@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { useStore } from '../store';
 import { MODEL_PATHS } from '../../constants/assets';
 
-export function WildFlower({ position, color }: { position: [number, number, number]; color: string }) {
+export function WildFlower({ position }: { position: [number, number, number] }) {
   const meshRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF(MODEL_PATHS.FLOWER);
   const clonedScene = useMemo(() => scene.clone(), [scene]);
@@ -36,76 +36,87 @@ export function WildFlower({ position, color }: { position: [number, number, num
   );
 }
 
-export function Grass({
-  position,
-  rotation,
-  scale,
+function InstancedGrass({
+  count,
+  radius,
+  scaleMin,
+  scaleMax,
 }: {
-  position: [number, number, number];
-  rotation: number;
-  scale: number;
+  count: number;
+  radius: number;
+  scaleMin: number;
+  scaleMax: number;
 }) {
-  const { scene } = useGLTF(MODEL_PATHS.GRASS);
-  const clonedScene = useMemo(() => scene.clone(), [scene]);
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+
+  const transforms = useMemo(
+    () =>
+      Array.from({ length: count }).map(() => {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = Math.sqrt(Math.random()) * radius;
+        const x = Math.cos(angle) * dist;
+        const z = Math.sin(angle) * dist;
+        const yaw = Math.random() * Math.PI * 2;
+        const pitch = (Math.random() - 0.5) * 0.18;
+        const scale = scaleMin + Math.random() * Math.max(scaleMax - scaleMin, 0.001);
+        return { x, z, yaw, pitch, scale };
+      }),
+    [count, radius, scaleMin, scaleMax]
+  );
+
+  useMemo(() => {
+    if (!meshRef.current) return;
+    const dummy = new THREE.Object3D();
+    for (let i = 0; i < transforms.length; i++) {
+      const t = transforms[i];
+      dummy.position.set(t.x, -1.5, t.z);
+      dummy.rotation.set(t.pitch, t.yaw, 0);
+      dummy.scale.set(0.18 * t.scale, 0.9 * t.scale, 0.18 * t.scale);
+      dummy.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.matrix);
+    }
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  }, [transforms]);
 
   return (
-    <primitive object={clonedScene} position={position} rotation={[0, rotation, 0]} scale={scale} />
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+      <coneGeometry args={[0.12, 1.0, 4, 1]} />
+      <meshStandardMaterial color="#3f7f2d" roughness={0.95} metalness={0} />
+    </instancedMesh>
   );
 }
 
 export function Meadow() {
   const debugConfig = useStore((state) => state.debugConfig);
 
-  const { flowers, grassPatches } = useMemo(() => {
-    const f: { position: [number, number, number]; color: string }[] = [];
-    const g: { position: [number, number, number]; rotation: number; scale: number }[] = [];
-    const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+  const flowers = useMemo(() => {
+    const f: { position: [number, number, number] }[] = [];
 
     for (let i = 0; i < debugConfig.flowerCount; i++) {
-      const x = (Math.random() - 0.5) * debugConfig.flowerFieldRadius;
-      const z = (Math.random() - 0.5) * debugConfig.flowerFieldRadius;
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      f.push({ position: [x, -1.5, z], color });
+      const angle = Math.random() * Math.PI * 2;
+      const radius = Math.sqrt(Math.random()) * debugConfig.flowerFieldRadius;
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      f.push({ position: [x, -1.5, z] });
     }
 
-    for (let i = 0; i < debugConfig.grassCount; i++) {
-      const x = (Math.random() - 0.5) * debugConfig.grassFieldRadius;
-      const z = (Math.random() - 0.5) * debugConfig.grassFieldRadius;
-      const rotation = Math.random() * Math.PI * 2;
-      const scale =
-        debugConfig.grassScaleMin +
-        Math.random() * Math.max(debugConfig.grassScaleMax - debugConfig.grassScaleMin, 0);
-
-      g.push({ position: [x, -1.5, z], rotation, scale });
-    }
-
-    return { flowers: f, grassPatches: g };
-  }, [
-    debugConfig.flowerCount,
-    debugConfig.grassCount,
-    debugConfig.flowerFieldRadius,
-    debugConfig.grassFieldRadius,
-    debugConfig.grassScaleMin,
-    debugConfig.grassScaleMax,
-  ]);
+    return f;
+  }, [debugConfig.flowerCount, debugConfig.flowerFieldRadius]);
 
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.51, 0]} receiveShadow>
-        <planeGeometry args={[100, 100]} />
-        <meshStandardMaterial color={debugConfig.groundColor} transparent opacity={debugConfig.groundOpacity} />
-      </mesh>
-
-      {grassPatches.map((g, i) => (
-        <Grass key={`grass-${i}`} position={g.position} rotation={g.rotation} scale={g.scale} />
-      ))}
+      <InstancedGrass
+        count={debugConfig.grassCount}
+        radius={debugConfig.grassFieldRadius}
+        scaleMin={debugConfig.grassScaleMin}
+        scaleMax={debugConfig.grassScaleMax}
+      />
 
       {flowers.map((f, i) => (
-        <WildFlower key={`flower-${i}`} position={f.position} color={f.color} />
+        <WildFlower key={`flower-${i}`} position={f.position} />
       ))}
     </group>
   );
 }
 
 useGLTF.preload(MODEL_PATHS.FLOWER);
-useGLTF.preload(MODEL_PATHS.GRASS);
