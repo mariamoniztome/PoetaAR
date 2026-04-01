@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useStore } from '../store';
 
@@ -7,32 +7,19 @@ export function MotionControllerSafe() {
   const updateEnergy = useStore((state) => state.updateEnergy);
 
   useEffect(() => {
-    // Simple touch-based energy system that won't cause white screen
     const handleTouchMove = (e: TouchEvent) => {
-      try {
-        if (e.touches.length > 0) {
-          console.log('Touch movement detected');
-          addEnergy(0.5);
-        }
-      } catch (error) {
-        console.error('Error in touch handler:', error);
+      if (e.touches.length > 0) {
+        addEnergy(0.5);
       }
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      try {
-        const movement = Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0);
-        addEnergy(movement * 0.0005);
-      } catch (error) {
-        console.error('Error in mouse handler:', error);
-      }
+      const movement = Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0);
+      addEnergy(movement * 0.0005);
     };
 
-    // Only add safe event listeners
     window.addEventListener('touchmove', handleTouchMove);
     window.addEventListener('mousemove', handleMouseMove);
-    
-    console.log('Safe motion controller initialized');
 
     return () => {
       window.removeEventListener('touchmove', handleTouchMove);
@@ -44,5 +31,5 @@ export function MotionControllerSafe() {
     updateEnergy(delta);
   });
 
-  return null; // No UI component, just logic
+  return null;
 }

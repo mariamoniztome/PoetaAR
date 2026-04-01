@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Ocean } from './Ocean';
 import { FloatingObject } from './FloatingObject';
-import { MotionController } from './MotionController';
+import { MotionControllerSafe } from './MotionControllerSafe';
 import { MODEL_PATHS } from '../../constants/assets';
 import { useStore } from '../store';
 
@@ -10,7 +10,7 @@ export function ARScene({ modelUrl = MODEL_PATHS.FLOATING_OBJECT }: { modelUrl?:
 
   return (
     <>
-      <MotionController />
+      <MotionControllerSafe />
       <ambientLight intensity={debugConfig.ambientLightIntensity} />
       <directionalLight
         position={debugConfig.directionalLightPosition}

@@ -4,12 +4,6 @@ import { useStore } from './store';
 import { AudioExperience } from '../components/AudioExperience';
 import { CameraBackground } from '../components/CameraBackground';
 import { SOUND_PATHS } from '../constants/assets';
-import {
-  DebugColorInput,
-  DebugNumberInput,
-  DebugSection,
-  SceneDebugPanel,
-} from '../components/debug/SceneDebugPanel';
 
 interface Scene1Props {
   modelUrl?: string;
