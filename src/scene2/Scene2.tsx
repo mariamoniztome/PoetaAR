@@ -47,7 +47,7 @@ export default function Scene2({
         <ARScene />
       </Canvas>
 
-      <SceneDebugPanel title="Debug Scene 2" values={{ debugConfig }} onReset={resetDebugConfig}>
+      {/* <SceneDebugPanel title="Debug Scene 2" values={{ debugConfig }} onReset={resetDebugConfig}>
         <DebugSection title="GLB Repeticao">
           <DebugNumberInput
             label="Flores"
@@ -132,7 +132,7 @@ export default function Scene2({
             onChange={(value) => setDebugConfig({ directionalLightColor: value })}
           />
         </DebugSection>
-      </SceneDebugPanel>
+      </SceneDebugPanel> */}
     </div>
   );
 }

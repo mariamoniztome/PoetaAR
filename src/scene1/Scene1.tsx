@@ -58,7 +58,7 @@ export default function Scene1({
         <ARScene modelUrl={modelUrl} />
       </Canvas>
 
-      <SceneDebugPanel
+      {/* <SceneDebugPanel
         title="Debug Scene 1"
         values={{ energy, targetEnergy, debugConfig }}
         onReset={resetDebugConfig}
@@ -285,7 +285,7 @@ export default function Scene1({
             onChange={(value) => setDebugConfig({ directionalLightColor: value })}
           />
         </DebugSection>
-      </SceneDebugPanel>
+      </SceneDebugPanel> */}
     </div>
   );
 }

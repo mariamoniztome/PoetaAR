@@ -55,7 +55,7 @@ export default function Scene3({
         <ARScene />
       </Canvas>
 
-      <SceneDebugPanel title="Debug Scene 3" values={{ debugConfig }} onReset={resetDebugConfig}>
+      {/* <SceneDebugPanel title="Debug Scene 3" values={{ debugConfig }} onReset={resetDebugConfig}>
         <DebugSection title="GLB Repeticao">
           <DebugNumberInput
             label="Passaros"
@@ -192,7 +192,7 @@ export default function Scene3({
             onChange={(value) => setDebugConfig({ proceduralCloudOpacity: value })}
           />
         </DebugSection>
-      </SceneDebugPanel>
+      </SceneDebugPanel> */}
     </div>
   );
 }
