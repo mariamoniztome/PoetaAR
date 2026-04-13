@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import type { PoemData } from '../../types/content';
 
 interface PoemPanelProps {
@@ -22,7 +22,7 @@ export default function PoemThreePanel({ poem }: PoemPanelProps) {
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]" />
       
       {/* Decorative Grid */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:40px_40px]" />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[radial-gradient(#000_1px,transparent_1px)] bg-size-[40px_40px]" />
 
       {/* Poem Content */}
       <div className="max-w-2xl px-8 relative z-10 text-center">

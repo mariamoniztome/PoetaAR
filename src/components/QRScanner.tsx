@@ -81,7 +81,7 @@ export default function QRScanner({ onClose }: QRScannerProps) {
           )}
           
           {/* Scanning Overlay UI */}
-          <div className="absolute inset-0 pointer-events-none border-[40px] border-black/40">
+          <div className="absolute inset-0 pointer-events-none border-40 border-black/40">
             <div className="w-full h-full border border-white/30 rounded-xl" />
           </div>
         </div>

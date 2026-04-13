@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import type { AppTexts, PoemData } from '../../types/content';
 import TimelineEventCard from './TimelineEventCard';
 import PoemOnePanel from '../poems/PoemOnePanel';
