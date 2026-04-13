@@ -26,9 +26,9 @@ export const SOUND_PATHS = {
   
   // Scene 2: Field
   FIELD_BG: poem1Mp3,
-  FIELD_NARRATION: narration1,
+  FIELD_NARRATION: narration3,
   
   // Scene 3: Sky
   SKY_BG: poem3Mp3,
-  SKY_NARRATION: narration3,
+  SKY_NARRATION: narration1,
 };
