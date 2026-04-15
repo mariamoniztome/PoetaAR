@@ -5,11 +5,11 @@ import TimelineEventCard from './TimelineEventCard';
 import PoemOnePanel from '../poems/PoemOnePanel';
 import PoemTwoPanel from '../poems/PoemTwoPanel';
 import PoemThreePanel from '../poems/PoemThreePanel';
-import logotipoSvg from '../../assets/img/logotipo.svg';
-import heroSection from '../../assets/img/header.svg';
-import portrait from '../../assets/img/36anos.png';
-import poem from '../../assets/img/hero.svg';
-import logotipoSvg2 from '../../assets/img/logo2.svg';
+import logotipoSvg from '/img/logotipo.svg';
+import heroSection from '/img/header.svg';
+import portrait from '/img/36anos.png';
+import poem from '/img/hero.svg';
+import logotipoSvg2 from '/img/logo2.svg';
 
 interface TimelineScreenProps {
   texts: AppTexts;
