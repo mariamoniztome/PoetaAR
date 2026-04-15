@@ -33,7 +33,7 @@ export default function TimelineEventCard({ event, index }: TimelineEventCardPro
             hidden: { opacity: 0, y: 20 },
             visible: { opacity: 0.15, y: 0 }
           }}
-          className="font-serif italic text-6xl md:text-8xl block mb-2 leading-none"
+          className="font-serif italic text-6xl md:text-7xl block mb-2 leading-none"
         >
           {event.year}
         </motion.span>
