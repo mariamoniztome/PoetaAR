@@ -19,32 +19,32 @@
       {
         "year": "1904",
         "title": "Porto: Oficio e Leitura",
-        "desc": "Com cerca de 18 anos vai para o Porto, aprende carpintaria e frequenta escola noturna. A leitura autodidata passa a ser parte central da sua formacao.",
-        "imageA": "/img/escola.png"
+        "desc": "Com cerca de 18 anos vai para o Porto, aprende carpintaria e frequenta escola noturna. A leitura autodidata passa a ser parte central da sua formação.",
+        "imageA": "/img/porto.jpg"
       },
       {
         "year": "1910",
         "title": "Republica e Voz Militante",
         "desc": "No contexto da implantacao da Republica, aproxima-se do meio anarco-sindicalista e usa a poesia como instrumento de critica social.",
-        "imageB": "/img/idoso.jpeg"
+        "imageB": "/img/acompanhado.jpeg"
       },
       {
         "year": "1910-1930",
         "title": "Folhas Volantes e Oralidade",
         "desc": "Os poemas circulam em folhetos de pequena tiragem e em desafios cantados. Muito da sua obra sobrevive pela transmissao oral entre familias e vizinhos.",
-        "imageA": "/img/capa_livro.jpg"
+        "imageA": "/img/educacao.png"
       },
       {
         "year": "1930s",
         "title": "Resistencia no Estado Novo",
         "desc": "Durante o Estado Novo, e perseguido e preso. Mantem os ideais libertarios, continuando a escrever e a cantar em contexto popular.",
-        "imageB": "/img/campa.jpeg"
+        "imageB": "/img/familia.jpeg"
       },
       {
         "year": "1960",
         "title": "Morte e Cortejo Popular",
         "desc": "Morre a 12 de dezembro, aos 74 anos. O funeral torna-se um gesto coletivo de reconhecimento por parte da populacao de Vila do Conde.",
-        "imageA": "/img/campa.jpeg"
+        "imageA": "/img/familia.jpg"
       },
       {
         "year": "1967",
