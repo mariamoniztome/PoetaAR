@@ -81,7 +81,8 @@
       "marker": {
         "roman": "I",
         "label": "O Mar",
-        "qrCode": "/scene/sea"
+        "qrCode": "/scene/sea",
+        "imageTarget": "/targets/target1.jpg"
       }
     },
     {
@@ -96,7 +97,8 @@
       "marker": {
         "roman": "II",
         "label": "O Campo",
-        "qrCode": "/scene/field"
+        "qrCode": "/scene/field",
+        "imageTarget": "/targets/target2.jpg"
       }
     },
     {
@@ -111,7 +113,8 @@
       "marker": {
         "roman": "III",
         "label": "O Céu",
-        "qrCode": "/scene/sky"
+        "qrCode": "/scene/sky",
+        "imageTarget": "/targets/target3.jpg"
       }
     }
   ],
@@ -139,9 +142,9 @@
   "markersPage": {
     "title": "Marcadores do Poeta",
     "subtitle": "Imprime ou visualiza estes códigos para ativar a AR",
-    "instructionLine1": "1. Abre a aplicação no teu telemóvel.",
-    "instructionLine2": "2. Clica em 'Entrar em AR'.",
-    "instructionLine3": "3. Aponta para um destes QR Codes.",
+    "instructionLine1": "1. Imprime esta página e recorta os marcadores.",
+    "instructionLine2": "2. Abre a app e clica em 'Entrar em Realidade Aumentada'.",
+    "instructionLine3": "3. Aponta a câmara para uma das imagens e aguarda o reconhecimento.",
     "printButton": "Imprimir Marcadores",
     "footer": "© 2026 Poeta Carpinteiro - Experiência Imersiva",
     "markerPrefix": "Marcador "

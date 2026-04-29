@@ -14,6 +14,7 @@ export interface PoemData {
     roman: string;
     label: string;
     qrCode: string;
+    imageTarget?: string;
   };
 }
 
