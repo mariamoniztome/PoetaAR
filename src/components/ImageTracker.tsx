@@ -111,6 +111,11 @@ export default function ImageTracker({ onClose }: ImageTrackerProps) {
         const blobUrl = URL.createObjectURL(new Blob([buffer as ArrayBuffer]));
         setPhase('tracking');
 
+        // Wait one frame so the browser has laid out the container and
+        // clientWidth/clientHeight are non-zero before MindARThree reads them.
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        if (cancelled || !containerRef.current) return;
+
         const mindarThree = new MindARThree({
           container: containerRef.current,
           imageTargetSrc: blobUrl,
@@ -122,13 +127,17 @@ export default function ImageTracker({ onClose }: ImageTrackerProps) {
         mindarInstance = mindarThree;
         const { renderer, scene, camera } = mindarThree;
 
+        const safeStop = () => {
+          try { mindarThree.stop(); } catch { /* ignore */ }
+        };
+
         TARGETS.forEach(({ route }, i) => {
           const anchor = mindarThree.addAnchor(i);
           anchor.onTargetFound = () => {
             if (cancelled) return;
             cancelled = true;
             renderer.setAnimationLoop(null);
-            mindarThree.stop().catch(() => {});
+            safeStop();
             URL.revokeObjectURL(blobUrl);
             navigate(route);
             onClose();
@@ -136,10 +145,12 @@ export default function ImageTracker({ onClose }: ImageTrackerProps) {
         });
 
         await mindarThree.start();
-        if (cancelled) {
-          mindarThree.stop().catch(() => {});
-          return;
-        }
+        if (cancelled) { safeStop(); return; }
+
+        // Ensure the WebGL canvas clears to transparent so the camera video
+        // underneath is visible through it.
+        renderer.setClearColor(0x000000, 0);
+        renderer.domElement.style.background = 'transparent';
 
         renderer.setAnimationLoop(() => {
           if (!cancelled) renderer.render(scene, camera);
@@ -165,11 +176,10 @@ export default function ImageTracker({ onClose }: ImageTrackerProps) {
   }, [navigate, onClose]);
 
   return (
-    <div className="w-full h-full relative bg-black overflow-hidden">
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
       <div
         ref={containerRef}
-        className="w-full h-full"
-        style={{ position: 'relative' }}
+        style={{ position: 'absolute', inset: 0 }}
       />
 
       {phase === 'init' && (
