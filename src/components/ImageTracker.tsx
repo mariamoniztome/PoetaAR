@@ -86,7 +86,7 @@ export default function ImageTracker({ onClose }: ImageTrackerProps) {
 
         if (cancelled || !containerRef.current) return;
 
-        let buffer = await dbGet(DB_KEY);
+        let buffer: ArrayBuffer | null = await dbGet(DB_KEY);
 
         if (!buffer) {
           setPhase('compiling');
@@ -97,17 +97,18 @@ export default function ImageTracker({ onClose }: ImageTrackerProps) {
 
           const compiler = new Compiler();
           await compiler.compileImageTargets(images, (p: number) => {
-            if (!cancelled) setProgress(Math.round(p * 100));
+            if (!cancelled) setProgress(Math.min(100, Math.max(0, Math.round(p))));
           });
 
           if (cancelled) return;
-          buffer = await compiler.exportData();
-          await dbSet(DB_KEY, buffer);
+          const compiled = (await compiler.exportData()) as ArrayBuffer;
+          await dbSet(DB_KEY, compiled);
+          buffer = compiled;
         }
 
         if (cancelled || !containerRef.current) return;
 
-        const blobUrl = URL.createObjectURL(new Blob([buffer]));
+        const blobUrl = URL.createObjectURL(new Blob([buffer as ArrayBuffer]));
         setPhase('tracking');
 
         const mindarThree = new MindARThree({
