@@ -1,103 +1,102 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
 # Poeta Carpinteiro AR
 
-Experiencia web imersiva com 3 cenas 3D/AR inspiradas no universo do Poeta Carpinteiro:
+Experiência web de realidade aumentada baseada em rastreamento de imagem, criada para acompanhar o quadro em crochet do Poeta Carpinteiro. Aponta a câmara para o quadro físico e as cenas 3D surgem ancoradas ao próprio tecido.
 
-- Mar (`/scene/sea`)
-- Campo (`/scene/field`)
-- Ceu (`/scene/sky`)
+## Como funciona
 
-O projeto usa React + Vite + Three.js (React Three Fiber), com configuracao em tempo real por paineis de debug por cena.
+O projeto usa **MindAR** para detetar três zonas do quadro em tempo real. Quando uma zona é reconhecida, o conteúdo 3D fica spatialmente ancorado à imagem física — não é uma sobreposição fixa ao ecrã, mas sim fixada ao marcador no espaço tridimensional.
+
+| Zona | Conteúdo |
+|------|----------|
+| Farol (canto direito) | Mar com ondas em shader GLSL + farol 3D |
+| Flores (centro) | Campo de relva instanciada + flores animadas |
+| Andorinhas (topo) | Bando de pássaros em voo com animação skeletal |
+
+Cada cena tem áudio ambiente e narração associados, que arrancam automaticamente ao detetar o marcador e param ao perdê-lo.
 
 ## Stack
 
-- React 19
-- Vite 6
-- TypeScript
-- Three.js + @react-three/fiber + @react-three/drei
-- Zustand (estado por cena)
-- Tailwind CSS
-- React Router
+- **React 19** + **TypeScript**
+- **Vite 6**
+- **MindAR** (`mind-ar ^1.2.5`) — rastreamento de imagem
+- **Three.js** (`^0.183.2`) — renderização 3D vanilla
+- **Tailwind CSS**
+- **React Router**
 
 ## Requisitos
 
 - Node.js 18+
 - npm
-- Git LFS (recomendado para assets grandes)
+- Câmara (dispositivo móvel ou webcam) para a experiência AR
+- Git LFS para os assets (modelos GLB, áudio MP3, imagens)
 
-## Run Locally
-
-1. Instalar dependencias:
+## Correr localmente
 
 ```bash
 npm install
-```
-
-2. Correr em desenvolvimento:
-
-```bash
 npm run dev
 ```
 
-Por defeito tenta usar a porta `3000`.
-Se estiver ocupada, o Vite muda automaticamente para a seguinte disponivel (`3001`, `3002`, ...).
+O servidor arranca na porta `3000`. Se estiver ocupada, o Vite escolhe automaticamente a seguinte disponível.
+
+Para testar AR num dispositivo móvel, usa o IP local da máquina (ex: `http://192.168.x.x:3000`) — HTTPS não é obrigatório em rede local, mas é necessário em produção para aceder à câmara.
 
 ## Scripts
 
 ```bash
-npm run dev      # desenvolvimento
-npm run build    # build producao
+npm run dev      # desenvolvimento com hot reload
+npm run build    # build de produção
 npm run preview  # preview local da build
-npm run lint     # type-check (tsc --noEmit)
+npm run lint     # verificação de tipos (tsc --noEmit)
 ```
 
-## Rotas principais
+## Rotas
 
-- `/` landing
-- `/markers` pagina de marcadores QR
-- `/scene/sea` cena 1
-- `/scene/field` cena 2
-- `/scene/sky` cena 3
+| Rota | Descrição |
+|------|-----------|
+| `/` | Landing page com timeline |
+| `/ar` | Experiência AR principal (MindAR + 3 cenas) |
+| `/markers` | Página com os QR codes dos marcadores |
 
 ## Estrutura
 
-- `src/scene1` mar + farol
-- `src/scene2` campo + flores/relva
-- `src/scene3` ceu + bando + nuvens
-- `src/components/debug` painel debug reutilizavel
-- `public/data/texts.json` conteudos textuais
+```
+src/
+  pages/
+    ARPage.tsx          # página AR unificada — MindAR + 3 cenas ancoradas
+    LandingPage.tsx     # landing com timeline
+    QRCodePage.tsx      # página de marcadores
+  components/
+    timeline/           # componentes da timeline na landing
+    QRScanner.tsx       # leitor de QR code
+  constants/
+    assets.ts           # caminhos de modelos, áudio e imagens
+  types/
+    content.ts          # tipos do conteúdo textual
 
-## Debug em tempo real
+public/
+  targets/
+    target1.jpg         # zona do farol (âncora 0)
+    target2.jpg         # zona das flores (âncora 1)
+    target3.jpg         # zona dos pássaros (âncora 2)
+    quadro.png          # quadro original completo
+  models/               # modelos GLB (farol, flor, pássaro)
+  sounds/               # áudio ambiente e narrações
+  data/
+    texts.json          # conteúdos textuais da app
+```
 
-Cada cena tem um painel lateral de debug com:
+## Targets AR
 
-- parametros de modelo (escala, contagem, posicao)
-- luz e cores
-- comportamento da animacao/movimento
-- botao de export JSON
+Os três ficheiros `target*.jpg` são recortes do quadro em crochet original (`quadro.png`), cada um correspondendo a uma zona distinta da composição. O MindAR compila-os em formato `.mind` na primeira visita e guarda em IndexedDB (chave `mind-targets-v2`) para carregamentos seguintes.
 
-## Assets grandes e Git LFS
+## Assets e Git LFS
 
-Este repositorio usa media pesados (modelos, audio, imagens). Para evitar erros de push por limite de 100MB do GitHub, usa Git LFS.
-
-### Setup rapido LFS
+Os modelos GLB, ficheiros de áudio e imagens grandes estão rastreados com Git LFS. Para clonar com todos os assets:
 
 ```bash
 git lfs install
-git lfs track "src/assets/models/*.glb"
-git lfs track "src/assets/sound/*.mp3"
-git lfs track "src/assets/img/*.png"
-git lfs track "src/assets/img/*.jpg"
-git lfs track "src/assets/img/*.jpeg"
-git add .gitattributes
-git commit -m "chore: track assets with Git LFS"
+git clone <url-do-repo>
 ```
 
-## Notas
-
-- Alguns parametros de cena podem ser pesados (contagens muito altas de instancias).
-- Se houver degradacao de performance, reduz `grassCount`, `flowerCount` e sombras dinâmicas.
-
+Se os ficheiros aparecerem como ponteiros em vez do conteúdo real, corre `git lfs pull`.
