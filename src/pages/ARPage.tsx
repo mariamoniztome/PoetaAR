@@ -155,7 +155,22 @@ export default function ARPage() {
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#000', overflow: 'hidden' }}>
-      <div ref={containerRef} style={{ position: 'absolute', inset: 0 }} />
+      <style>{`
+        .ar-container video {
+          position: absolute !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+        }
+        .ar-container canvas {
+          position: absolute !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+      `}</style>
+      <div ref={containerRef} className="ar-container" style={{ position: 'absolute', inset: 0 }} />
 
       {/* Back */}
       <button

@@ -20,9 +20,9 @@ function SceneWrapper() {
     <div className="w-full h-screen relative">
       <button
         type="button"
-        onClick={() => navigate('/')}
+        onClick={() => navigate('/ar')}
         className="fixed top-6 left-6 z-1000 p-3 bg-black/20 backdrop-blur-md rounded-full text-white border border-white/10 hover:bg-white/10 transition-colors pointer-events-auto"
-        aria-label="Voltar para a pagina inicial"
+        aria-label="Voltar para a câmara"
       >
         <ArrowLeft size={20} />
       </button>
