@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Volume2, VolumeX, Loader } from 'lucide-react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { SkeletonUtils } from 'three/examples/jsm/utils/SkeletonUtils.js';
+import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { MODEL_PATHS, SOUND_PATHS } from '../constants/assets';
 
 // ─── Ocean shader (same GLSL as scene1/components/Ocean.tsx) ─────────────────
