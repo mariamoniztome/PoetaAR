@@ -6,6 +6,7 @@
 import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import QRCodePage from './pages/QRCodePage';
+import ARPage from './pages/ARPage';
 import Scene1 from './scene1/Scene1';
 import Scene2 from './scene2/Scene2';
 import Scene3 from './scene3/Scene3';
@@ -39,6 +40,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/markers" element={<QRCodePage />} />
+        <Route path="/ar" element={<ARPage />} />
         <Route path="/scene/:sceneId" element={<SceneWrapper />} />
       </Routes>
     </BrowserRouter>

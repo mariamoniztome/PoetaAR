@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { QrCode, X, Scan } from 'lucide-react';
-import ImageTracker from '../components/ImageTracker';
 import QRScanner from '../components/QRScanner';
 import TimelineScreen from '../components/timeline/TimelineScreen';
 import type { AppTexts, PoemData } from '../types/content';
 
-type ScannerMode = 'image' | 'qr';
+type ScannerMode = 'qr';
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   const [scannerMode, setScannerMode] = useState<ScannerMode | null>(null);
   const [content, setContent] = useState<{ texts: AppTexts; poems: PoemData[] } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,18 +48,17 @@ export default function LandingPage() {
       <TimelineScreen
         texts={content.texts}
         poems={content.poems}
-        onEnterAr={() => setScannerMode('image')}
+        onEnterAr={() => navigate('/ar')}
       />
 
-      {/* AR Scanner Overlay */}
+      {/* QR Scanner Overlay */}
       {scannerMode && (
         <div className="fixed inset-0 z-200 bg-black flex flex-col">
-          {/* Header */}
           <div className="p-6 flex justify-between items-center text-white z-10 shrink-0">
             <div className="flex items-center gap-3">
               <Scan className="w-5 h-5" />
               <span className="font-mono text-xs uppercase tracking-widest">
-                {scannerMode === 'image' ? 'Reconhecer Imagem' : 'Digitalizar QR Code'}
+                Digitalizar QR Code
               </span>
             </div>
             <button
@@ -70,28 +69,14 @@ export default function LandingPage() {
             </button>
           </div>
 
-          {/* Scanner */}
           <div className="flex-1 relative min-h-0">
-            {scannerMode === 'image' ? (
-              <ImageTracker onClose={closeScanner} />
-            ) : (
-              <QRScanner onClose={closeScanner} />
-            )}
+            <QRScanner onClose={closeScanner} />
           </div>
 
-          {/* Footer with toggle */}
           <div className="p-6 flex flex-col items-center gap-3 shrink-0 z-10">
             <p className="text-white/40 text-[10px] uppercase tracking-[0.3em] font-mono">
-              {scannerMode === 'image'
-                ? 'Aponta a câmara para uma das imagens impressas'
-                : 'Aponta a câmara para um QR Code do Poeta'}
+              Aponta a câmara para um QR Code do Poeta
             </p>
-            <button
-              onClick={() => setScannerMode(scannerMode === 'image' ? 'qr' : 'image')}
-              className="text-white/25 text-[10px] uppercase tracking-widest font-mono hover:text-white/50 transition-colors"
-            >
-              {scannerMode === 'image' ? 'Usar QR Code' : 'Usar Imagem'}
-            </button>
           </div>
         </div>
       )}
