@@ -83,7 +83,7 @@ const OCEAN_FRAG = `
 
 const DB_NAME = 'poeta-ar';
 const DB_STORE = 'cache';
-const DB_KEY = 'mind-targets-v1';
+const DB_KEY = 'mind-targets-v2';
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
