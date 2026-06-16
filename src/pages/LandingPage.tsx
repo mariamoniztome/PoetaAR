@@ -84,7 +84,7 @@ export default function LandingPage() {
       {/* Markers Link */}
       <Link
         to="/markers"
-        className="fixed bottom-6 right-6 z-150 p-3 bg-white/80 backdrop-blur-sm border border-black/10 rounded-full opacity-20 hover:opacity-100 transition-opacity"
+        className="none bottom-6 right-6 z-150 p-3 bg-white/80 backdrop-blur-sm border border-black/10 rounded-full opacity-20 hover:opacity-100 transition-opacity"
         title="Ver Marcadores"
       >
         <QrCode className="w-5 h-5" />
