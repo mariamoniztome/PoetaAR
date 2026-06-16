@@ -71,73 +71,40 @@ export default function ARPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>('init');
   const [progress, setProgress] = useState(0);
-  const [debugLog, setDebugLog] = useState<string[]>([]);
-  const [showDebug, setShowDebug] = useState(false);
-  const [imgStatus, setImgStatus] = useState<Array<'pending' | 'ok' | 'error'>>(TARGETS.map(() => 'pending'));
 
   useEffect(() => {
     if (!containerRef.current) return;
     let cancelled = false;
     let mindarInstance: any = null;
 
-    const log = (msg: string) => {
-      if (cancelled) return;
-      const ts = new Date().toLocaleTimeString('pt-PT', { hour12: false });
-      setDebugLog(prev => [...prev.slice(-40), `${ts}  ${msg}`]);
-    };
-
     const run = async () => {
       try {
-        log('A carregar módulos MindAR...');
         const [{ MindARThree }, { Compiler }] = await Promise.all([
           import(/* @vite-ignore */ 'mind-ar/dist/mindar-image-three.prod.js'),
           import(/* @vite-ignore */ 'mind-ar/dist/mindar-image.prod.js'),
         ]);
 
         if (cancelled) return;
-        log('Módulos OK. A verificar cache...');
 
         let buffer: ArrayBuffer | null = await dbGet(DB_KEY);
 
         if (!buffer) {
-          log('Cache não encontrada — a carregar imagens...');
           setPhase('compiling');
           setProgress(0);
-          const images = await Promise.all(
-            TARGETS.map((src, i) =>
-              loadHTMLImage(src)
-                .then((img) => {
-                  log(`Target ${i + 1} OK: ${src.split('/').pop()}`);
-                  setImgStatus(prev => { const n = [...prev]; n[i] = 'ok'; return n; });
-                  return img;
-                })
-                .catch((err: Error) => {
-                  log(`Target ${i + 1} ERRO: ${err.message}`);
-                  setImgStatus(prev => { const n = [...prev]; n[i] = 'error'; return n; });
-                  throw err;
-                })
-            )
-          );
+          const images = await Promise.all(TARGETS.map(loadHTMLImage));
           if (cancelled) return;
-          log('Imagens carregadas — a compilar targets...');
           const compiler = new Compiler();
           await compiler.compileImageTargets(images, (p: number) => {
             if (!cancelled) setProgress(Math.min(100, Math.round(p)));
           });
           if (cancelled) return;
-          log('Compilação completa — a guardar cache...');
           const compiled = (await compiler.exportData()) as ArrayBuffer;
           await dbSet(DB_KEY, compiled);
           buffer = compiled;
-          log('Cache guardada.');
-        } else {
-          log('Cache encontrada — compilação saltada.');
-          setImgStatus(TARGETS.map(() => 'ok'));
         }
 
         if (cancelled || !containerRef.current) return;
 
-        log('A criar instância MindAR...');
         const blobUrl = URL.createObjectURL(new Blob([buffer as ArrayBuffer]));
         await new Promise<void>((r) => requestAnimationFrame(() => r()));
         if (cancelled || !containerRef.current) return;
@@ -156,18 +123,12 @@ export default function ARPage() {
         TARGETS.forEach((_, i) => {
           const anchor = mindarThree.addAnchor(i);
           anchor.onTargetFound = () => {
-            log(`TARGET ${i + 1} DETECTADO → ${SCENE_ROUTES[i]}`);
             if (!cancelled) navigate(SCENE_ROUTES[i]);
-          };
-          anchor.onTargetLost = () => {
-            log(`Target ${i + 1} perdido`);
           };
         });
 
-        log(`${TARGETS.length} anchors prontos. A iniciar scanner...`);
         setPhase('scanning');
         await mindarThree.start();
-        log('Scanner activo — aponta para um target.');
         if (cancelled) { try { mindarThree.stop(); } catch { /* */ } return; }
 
         renderer.setAnimationLoop(() => {
@@ -177,7 +138,6 @@ export default function ARPage() {
 
       } catch (err) {
         console.error('ARPage error:', err);
-        log(`ERRO: ${err instanceof Error ? err.message : String(err)}`);
         if (!cancelled) setPhase('error');
       }
     };
@@ -264,56 +224,6 @@ export default function ARPage() {
         </div>
       )}
 
-      {/* Debug toggle */}
-      <button
-        onClick={() => setShowDebug(p => !p)}
-        className="fixed bottom-6 right-6 z-50 px-3 py-1.5 bg-black/50 border border-white/20 rounded text-white/50 text-[10px] font-mono uppercase tracking-widest hover:bg-black/70 transition-colors"
-      >
-        {showDebug ? 'Fechar Debug' : 'Debug'}
-      </button>
-
-      {showDebug && (
-        <div className="fixed bottom-16 right-6 z-50 w-80 max-h-[65vh] bg-black/85 border border-white/20 rounded-xl backdrop-blur-md text-white font-mono overflow-hidden flex flex-col">
-          {/* Header */}
-          <div className="px-3 py-2 border-b border-white/10 flex items-center justify-between shrink-0">
-            <span className="text-[10px] uppercase tracking-widest text-white/40">MindAR Debug</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full ${
-              phase === 'scanning'  ? 'bg-green-500/30 text-green-400' :
-              phase === 'compiling' ? 'bg-yellow-500/30 text-yellow-400' :
-              phase === 'error'     ? 'bg-red-500/30 text-red-400' :
-                                     'bg-white/10 text-white/40'
-            }`}>{phase} {phase === 'compiling' ? `${progress}%` : ''}</span>
-          </div>
-
-          {/* Targets */}
-          <div className="px-3 py-2 border-b border-white/10 space-y-1 shrink-0">
-            {TARGETS.map((src, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full shrink-0 ${
-                  imgStatus[i] === 'ok'    ? 'bg-green-400' :
-                  imgStatus[i] === 'error' ? 'bg-red-400' :
-                                             'bg-white/20 animate-pulse'
-                }`} />
-                <span className="text-white/50 truncate text-[10px]">T{i + 1}: {src.split('/').pop()}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Log */}
-          <div className="flex-1 overflow-y-auto px-3 py-2 space-y-0.5">
-            {debugLog.length === 0 && (
-              <p className="text-white/20 text-[10px]">Sem logs ainda...</p>
-            )}
-            {debugLog.map((line, i) => (
-              <p key={i} className={`text-[10px] leading-relaxed break-all ${
-                line.includes('ERRO')      ? 'text-red-400' :
-                line.includes('DETECTADO') ? 'text-green-400 font-bold' :
-                                             'text-white/45'
-              }`}>{line}</p>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -36,7 +36,7 @@ export interface Scene3DebugConfig {
 
 export const defaultScene3DebugConfig: Scene3DebugConfig = {
   birdCount: 10,
-  birdScale: 0.05,
+  birdScale: 0.15,
   flockPosition: [0, 0, 1],
   baseNoise: 0.2,
   stormNoiseMultiplier: 5,
