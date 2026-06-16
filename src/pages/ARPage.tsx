@@ -54,9 +54,9 @@ function loadHTMLImage(src: string): Promise<HTMLImageElement> {
 }
 
 const TARGETS = [
-  '/targets/target1.jpg',
-  '/targets/target2.jpg',
-  '/targets/target3.jpg',
+  '/targets/target1.png',
+  '/targets/target2.jpeg',
+  '/targets/target3.png',
 ];
 
 // anchor index → scene route

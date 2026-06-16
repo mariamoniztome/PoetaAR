@@ -7,16 +7,16 @@ interface ImageTrackerProps {
 }
 
 const TARGETS = [
-  { src: '/targets/target1.jpg', route: '/scene/sea' },
-  { src: '/targets/target2.jpg', route: '/scene/field' },
-  { src: '/targets/target3.jpg', route: '/scene/sky' },
+  { src: '/targets/target1.png', route: '/scene/sea' },
+  { src: '/targets/target2.jpeg', route: '/scene/field' },
+  { src: '/targets/target3.png', route: '/scene/sky' },
 ];
 
 const DB_NAME = 'poeta-ar';
 const DB_STORE = 'cache';
 // Bump this version string whenever any target image is replaced,
 // so the cached compilation is discarded and rebuilt from the new images.
-const DB_KEY = 'mind-targets-v1';
+const DB_KEY = 'mind-targets-v3';
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
