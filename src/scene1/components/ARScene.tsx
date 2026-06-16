@@ -21,6 +21,7 @@ export function ARScene({ modelUrl = MODEL_PATHS.FLOATING_OBJECT }: { modelUrl?:
 
       <Suspense fallback={null}>
         <Ocean />
+        {/* FloatingObject comentado — farol só via âncora AR
         {Array.from({ length: debugConfig.objectCount }).map((_, index) => {
           const angle = (index / Math.max(debugConfig.objectCount, 1)) * Math.PI * 2;
           const radius = debugConfig.objectCount <= 1 ? 0 : debugConfig.objectSpread;
@@ -33,6 +34,7 @@ export function ARScene({ modelUrl = MODEL_PATHS.FLOATING_OBJECT }: { modelUrl?:
             </group>
           );
         })}
+        */}
       </Suspense>
     </>
   );

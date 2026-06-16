@@ -69,7 +69,7 @@ function InstancedGrass({
     const dummy = new THREE.Object3D();
     for (let i = 0; i < transforms.length; i++) {
       const t = transforms[i];
-      dummy.position.set(t.x, -1.5, t.z);
+      dummy.position.set(t.x, -3.5, t.z);
       dummy.rotation.set(t.pitch, t.yaw, 0);
       dummy.scale.set(0.18 * t.scale, 0.9 * t.scale, 0.18 * t.scale);
       dummy.updateMatrix();
@@ -97,7 +97,7 @@ export function Meadow() {
       const radius = Math.sqrt(Math.random()) * debugConfig.flowerFieldRadius;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
-      f.push({ position: [x, -1.5, z] });
+      f.push({ position: [x, -3.5, z] });
     }
 
     return f;

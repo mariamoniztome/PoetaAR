@@ -20,8 +20,8 @@ function ProceduralCloudField() {
     () =>
       Array.from({ length: debugConfig.cloudCount }).map((_, index) => ({
         baseX: -10 + index * 5,
-        baseY: -1.8 + (index % 3) * 0.8,
-        baseZ: -8 - index * 2.5,
+        baseY: 3.5 + (index % 3) * 1.0,
+        baseZ: -14 - index * 2.0,
         phase: hash01(index + 1) * Math.PI * 2,
         speedFactor: 0.8 + hash01(index + 101) * 0.6,
         volume: 4 + hash01(index + 1001) * 3,

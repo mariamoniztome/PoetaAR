@@ -3,7 +3,8 @@ import { ARScene } from './components/ARScene';
 import { useStore } from './store';
 import { AudioExperience } from '../components/AudioExperience';
 import { CameraBackground } from '../components/CameraBackground';
-import { SOUND_PATHS } from '../constants/assets';
+import { SOUND_PATHS, MODEL_PATHS } from '../constants/assets';
+import { ARModelAnchor } from '../components/ARModelAnchor';
 import {
   DebugColorInput,
   DebugNumberInput,
@@ -46,6 +47,8 @@ export default function Scene2({
       >
         <ARScene />
       </Canvas>
+
+      <ARModelAnchor targetIndex={1} modelUrl={MODEL_PATHS.FLOWER} modelScale={0.04} debug />
 
       {/* <SceneDebugPanel title="Debug Scene 2" values={{ debugConfig }} onReset={resetDebugConfig}>
         <DebugSection title="GLB Repeticao">

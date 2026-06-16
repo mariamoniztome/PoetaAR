@@ -3,7 +3,8 @@ import { ARScene } from './components/ARScene';
 import { useStore } from './store';
 import { AudioExperience } from '../components/AudioExperience';
 import { CameraBackground } from '../components/CameraBackground';
-import { SOUND_PATHS } from '../constants/assets';
+import { SOUND_PATHS, MODEL_PATHS } from '../constants/assets';
+import { ARModelAnchor } from '../components/ARModelAnchor';
 
 interface Scene1Props {
   modelUrl?: string;
@@ -51,6 +52,8 @@ export default function Scene1({
       >
         <ARScene modelUrl={modelUrl} />
       </Canvas>
+
+      <ARModelAnchor targetIndex={0} modelUrl={MODEL_PATHS.FLOATING_OBJECT} modelScale={0.025} debug />
 
       {/* <SceneDebugPanel
         title="Debug Scene 1"
