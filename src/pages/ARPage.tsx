@@ -6,7 +6,7 @@ import { ArrowLeft, Loader } from 'lucide-react';
 
 const DB_NAME = 'poeta-ar';
 const DB_STORE = 'cache';
-const DB_KEY = 'mind-targets-v2';
+const DB_KEY = 'mind-targets-v5';
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
