@@ -34,7 +34,7 @@ export const defaultScene2DebugConfig: Scene2DebugConfig = {
   grassCount: 50000,
   flowerFieldRadius: 10,
   grassFieldRadius: 10,
-  flowerScale: 1.3,
+  flowerScale: 0.04,
   grassScaleMin: 0.8,
   grassScaleMax: 1.1,
   windBaseStrength: 0.08,

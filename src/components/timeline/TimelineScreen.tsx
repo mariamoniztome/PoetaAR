@@ -19,7 +19,7 @@ interface TimelineScreenProps {
 
 export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScreenProps) {
   return (
-    <div id="screen-timeline" className="relative w-full bg-brand-cream">
+    <div id="screen-timeline" className="relative w-full overflow-x-clip bg-brand-cream">
       {/* Section 1: Hero */}
       <header className="min-h-screen w-full flex flex-col px-8 py-8 relative overflow-hidden bg-[#fdfcf9]">
         {/* Decorative background element */}
