@@ -69,9 +69,13 @@ export function ARModelAnchor({ targetIndex, modelUrl, modelScale, debug = false
       const mindarThree = new MindARThree({
         container: containerRef.current,
         imageTargetSrc: blobUrl,
+        warmupTolerance: 1,
+        missTolerance: 10,
+        filterMinCF: 0.001, 
         uiLoading: 'no',
         uiScanning: 'no',
         uiError: 'no',
+
       });
       mindarInstance = mindarThree;
 
