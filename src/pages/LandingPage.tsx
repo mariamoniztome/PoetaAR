@@ -44,7 +44,7 @@ export default function LandingPage() {
   const closeScanner = () => setScannerMode(null);
 
   return (
-    <main className="relative min-h-screen bg-white text-black font-sans overflow-x-hidden selection:bg-black selection:text-white">
+    <main className="relative min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white">
       <TimelineScreen
         texts={content.texts}
         poems={content.poems}
