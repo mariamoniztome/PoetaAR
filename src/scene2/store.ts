@@ -30,10 +30,10 @@ export interface Scene2DebugConfig {
 }
 
 export const defaultScene2DebugConfig: Scene2DebugConfig = {
-  flowerCount: 1200,
-  grassCount: 50000,
-  flowerFieldRadius: 10,
-  grassFieldRadius: 10,
+  flowerCount: 700,
+  grassCount: 5000,
+  flowerFieldRadius: 5,
+  grassFieldRadius: 6,
   flowerScale: 0.04,
   grassScaleMin: 0.8,
   grassScaleMax: 1.1,

@@ -69,9 +69,9 @@ function InstancedGrass({
     const dummy = new THREE.Object3D();
     for (let i = 0; i < transforms.length; i++) {
       const t = transforms[i];
-      dummy.position.set(t.x, -3.5, t.z);
+      dummy.position.set(t.x, 0.15 * t.scale, t.z);
       dummy.rotation.set(t.pitch, t.yaw, 0);
-      dummy.scale.set(0.18 * t.scale, 0.9 * t.scale, 0.18 * t.scale);
+      dummy.scale.set(0.1 * t.scale, 0.3 * t.scale, 0.1 * t.scale);
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(i, dummy.matrix);
     }
@@ -81,7 +81,7 @@ function InstancedGrass({
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
       <coneGeometry args={[0.12, 1.0, 4, 1]} />
-      <meshStandardMaterial color="#3f7f2d" roughness={0.95} metalness={0} />
+      <meshStandardMaterial color="#3f7f2d" roughness={0.95} metalness={0} transparent opacity={0.75} />
     </instancedMesh>
   );
 }
@@ -97,7 +97,7 @@ export function Meadow() {
       const radius = Math.sqrt(Math.random()) * debugConfig.flowerFieldRadius;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
-      f.push({ position: [x, -3.5, z] });
+      f.push({ position: [x, 0, z] });
     }
 
     return f;

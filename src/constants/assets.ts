@@ -1,6 +1,12 @@
 import flowerGlb from '../assets/models/flower.glb?url';
 import lighthouseGlb from '../assets/models/lighthouse.glb?url';
 import birdGlb from '../assets/models/bird.glb?url';
+import hibiscusGlb from '../assets/models/blooming_hibiscus_time-lapse_animation.glb?url';
+import grassGlb from '../assets/models/grass.glb?url';
+// import realisticGrassGlb from '../assets/models/realistic_grass.glb?url';
+import ivyGlb from '../assets/models/cc0__japanese_grand_ivy.glb?url';
+import leopardGlb from '../assets/models/cc0__green_leopard_plant_f._japonicum.glb?url';
+import cloverGlb from '../assets/models/cc0___white_clover_trifolium_repens.glb?url';
 import poem1Mp3 from '../assets/sound/poem1.mp3?url';
 import poem2Mp3 from '../assets/sound/poem2.mp3?url';
 import poem3Mp3 from '../assets/sound/poem3.mp3?url';
@@ -9,13 +15,19 @@ import narration2 from '../assets/sound/narration2.mp3?url';
 import narration3 from '../assets/sound/narration3.mp3?url';
 
 export const MODEL_PATHS = {
-  // Scene 1: Ocean & Floating Object
+  // Scene 1
   FLOATING_OBJECT: lighthouseGlb,
 
-  // Scene 2: Meadow
+  // Scene 2
   FLOWER: flowerGlb,
+  HIBISCUS: hibiscusGlb,
+  GRASS: grassGlb,
+  // REALISTIC_GRASS: realisticGrassGlb,
+  IVY: ivyGlb,
+  LEOPARD_PLANT: leopardGlb,
+  WHITE_CLOVER: cloverGlb,
 
-  // Scene 3: Flock
+  // Scene 3
   BIRD: birdGlb,
 };
 
