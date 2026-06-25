@@ -53,7 +53,7 @@ export default function Scene1({
         <ARScene modelUrl={modelUrl} />
       </Canvas>
 
-      <ARModelAnchor targetIndex={0} modelUrl={MODEL_PATHS.FLOATING_OBJECT} modelScale={0.025} debug />
+      <ARModelAnchor targetIndex={0} modelUrl={MODEL_PATHS.FLOATING_OBJECT} modelScale={0.025} />
 
       {/* <SceneDebugPanel
         title="Debug Scene 1"

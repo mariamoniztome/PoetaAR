@@ -48,7 +48,7 @@ export default function Scene2({
         <ARScene />
       </Canvas>
 
-      <ARModelAnchor targetIndex={1} modelUrl={MODEL_PATHS.FLOWER} modelScale={0.04} debug />
+      <ARModelAnchor targetIndex={1} modelUrl={MODEL_PATHS.FLOWER} modelScale={0.04} />
 
       {/* <SceneDebugPanel title="Debug Scene 2" values={{ debugConfig }} onReset={resetDebugConfig}>
         <DebugSection title="GLB Repeticao">
