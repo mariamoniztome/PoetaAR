@@ -81,14 +81,14 @@ export default function LandingPage() {
         </div>
       )}
 
-      {/* Markers Link */}
+      {/* Markers Link
       <Link
         to="/markers"
         className="none bottom-6 right-6 z-150 p-3 bg-white/80 backdrop-blur-sm border border-black/10 rounded-full opacity-20 hover:opacity-100 transition-opacity"
         title="Ver Marcadores"
       >
         <QrCode className="w-5 h-5" />
-      </Link>
+      </Link> */}
     </main>
   );
 }
