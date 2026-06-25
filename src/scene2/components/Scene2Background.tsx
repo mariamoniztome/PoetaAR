@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { MODEL_PATHS } from '../../constants/assets';
@@ -101,12 +101,19 @@ function Ground({ cfg }: { cfg: BgConfig }) {
   );
 }
 
-function GeoGrass({ frozen }: { frozen: BgConfig }) {
+function GeoGrass({ frozen, windRef }: { frozen: BgConfig; windRef: React.RefObject<number> }) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
+
+  // Store base matrices to apply sway on top each frame
+  const baseMats = useRef<THREE.Matrix4[]>([]);
+  const phases   = useRef<number[]>([]);
+
   useEffect(() => {
     const mesh = meshRef.current;
     if (!mesh) return;
     const dummy = new THREE.Object3D();
+    baseMats.current = [];
+    phases.current   = [];
     for (let i = 0; i < frozen.geoCount; i++) {
       const angle = Math.random() * Math.PI * 2;
       const r = Math.sqrt(Math.random()) * frozen.geoRadius;
@@ -118,10 +125,32 @@ function GeoGrass({ frozen }: { frozen: BgConfig }) {
       dummy.rotation.set((Math.random() - 0.5) * 0.2, Math.random() * Math.PI * 2, 0);
       dummy.scale.set(0.1 * s, 0.3 * s, 0.1 * s);
       dummy.updateMatrix();
+      baseMats.current.push(dummy.matrix.clone());
+      phases.current.push(Math.random() * Math.PI * 2);
       mesh.setMatrixAt(i, dummy.matrix);
     }
     mesh.instanceMatrix.needsUpdate = true;
   }, [frozen]);
+
+  useFrame(({ clock }) => {
+    const mesh = meshRef.current;
+    if (!mesh || baseMats.current.length === 0) return;
+    const t = clock.getElapsedTime();
+    const wind = (windRef.current ?? 0);
+    const amp = 0.05 + wind * 0.18;
+    const dummy = new THREE.Object3D();
+    for (let i = 0; i < frozen.geoCount; i++) {
+      dummy.matrix.copy(baseMats.current[i]);
+      dummy.matrix.decompose(dummy.position, dummy.quaternion, dummy.scale);
+      dummy.rotation.setFromQuaternion(dummy.quaternion);
+      dummy.rotation.z += Math.sin(t * 1.1 + phases.current[i]) * amp;
+      dummy.rotation.x += Math.sin(t * 0.8 + phases.current[i] + 1.3) * amp * 0.5;
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+  });
+
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, Math.max(frozen.geoCount, 1)]}>
       <coneGeometry args={[0.015, 1.0, 4, 1]} />
@@ -130,15 +159,32 @@ function GeoGrass({ frozen }: { frozen: BgConfig }) {
   );
 }
 
-function GlbScatter({ url, positions }: { url: string; positions: Pos[] }) {
+function GlbScatter({ url, positions, windRef }: { url: string; positions: Pos[]; windRef: React.RefObject<number> }) {
   const { scene } = useGLTF(url);
-  const clones = useMemo(() => positions.map(() => scene.clone(true)), [scene, positions]);
+
+  const clones = useMemo(() => positions.map((p) => {
+    const clone = scene.clone(true);
+    clone.rotation.y = p.ry;
+    return clone;
+  }), [scene, positions]);
+
+  const phases = useMemo(() => positions.map(() => Math.random() * Math.PI * 2), [positions]);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    const wind = (windRef.current ?? 0);
+    const amp = 0.04 + wind * 0.14;
+    clones.forEach((clone, i) => {
+      clone.rotation.z = Math.sin(t * 0.9 + phases[i]) * amp;
+      clone.rotation.x = Math.sin(t * 0.6 + phases[i] + 1.5) * amp * 0.5;
+    });
+  });
+
   return (
     <>
       {clones.map((clone, i) => (
         <primitive key={i} object={clone}
           position={[positions[i].x, positions[i].y, positions[i].z]}
-          rotation={[0, positions[i].ry, 0]}
           scale={positions[i].scale}
         />
       ))}
@@ -152,6 +198,31 @@ function BgScene({ live, frozen }: { live: BgConfig; frozen: BgConfig }) {
   const leopardPos = useMemo(() => makePos(frozen.leopardCount,frozen.plantRadius,  frozen.plantScaleMin,  frozen.plantScaleMax,  frozen.groundY, frozen.plantYOffset), [frozen]);
   const cloverPos  = useMemo(() => makePos(frozen.cloverCount, frozen.plantRadius,  frozen.plantScaleMin,  frozen.plantScaleMax,  frozen.groundY, frozen.plantYOffset), [frozen]);
 
+  // Wind energy: increases with pointer/touch velocity, decays over time
+  const windRef = useRef(0);
+
+  useEffect(() => {
+    let lastX = 0, lastY = 0;
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      const x = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
+      const y = 'touches' in e ? e.touches[0].clientY : (e as MouseEvent).clientY;
+      const speed = Math.sqrt((x - lastX) ** 2 + (y - lastY) ** 2);
+      windRef.current = Math.min(windRef.current + speed * 0.012, 1);
+      lastX = x; lastY = y;
+    };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('touchmove', onMove);
+    };
+  }, []);
+
+  // Decay wind energy each frame back to 0
+  useFrame((_, delta) => {
+    windRef.current = Math.max(windRef.current - delta * 1.2, 0);
+  });
+
   return (
     <>
       <CameraController x={live.camX} y={live.camY} z={live.camZ} fov={live.camFov} />
@@ -159,12 +230,12 @@ function BgScene({ live, frozen }: { live: BgConfig; frozen: BgConfig }) {
       <directionalLight position={[3, 8, 5]} intensity={2.5} />
 
       <Ground cfg={live} />
-      <GeoGrass frozen={frozen} />
+      <GeoGrass frozen={frozen} windRef={windRef} />
 
-      <GlbScatter url={MODEL_PATHS.GRASS}         positions={grassPos} />
-      <GlbScatter url={MODEL_PATHS.IVY}           positions={ivyPos} />
-      <GlbScatter url={MODEL_PATHS.LEOPARD_PLANT} positions={leopardPos} />
-      <GlbScatter url={MODEL_PATHS.WHITE_CLOVER}  positions={cloverPos} />
+      <GlbScatter url={MODEL_PATHS.GRASS}         positions={grassPos} windRef={windRef} />
+      <GlbScatter url={MODEL_PATHS.IVY}           positions={ivyPos}   windRef={windRef} />
+      <GlbScatter url={MODEL_PATHS.LEOPARD_PLANT} positions={leopardPos} windRef={windRef} />
+      <GlbScatter url={MODEL_PATHS.WHITE_CLOVER}  positions={cloverPos}  windRef={windRef} />
     </>
   );
 }
@@ -250,7 +321,7 @@ export function Scene2Background() {
 
         <div style={{ display: 'flex', gap: 6, marginTop: 10 }}>
           <Btn color="#27ae60" onClick={rebuild}>Rebuild</Btn>
-          <Btn color="#c0392b" onClick={() => { setLive(DEFAULT); setTimeout(() => { setFrozen(DEFAULT); setRebuildKey(k => k + 1); }, 50); }}>Reset</Btn>
+          <Btn color="#c0392b" onClick={() => { setLive(DEFAULT); setTimeout(() => setFrozen(DEFAULT), 50); }}>Reset</Btn>
         </div>
         <div style={{ marginTop: 8, fontSize: 7, opacity: 0.25, lineHeight: 1.6 }}>
           Tudo atualiza 400ms após parares. Rebuild = imediato.
