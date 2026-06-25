@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll } from 'framer-motion';
 import type { AppTexts, PoemData } from '../../types/content';
 import TimelineEventCard from './TimelineEventCard';
 import PoemOnePanel from '../poems/PoemOnePanel';
@@ -18,6 +18,12 @@ interface TimelineScreenProps {
 }
 
 export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScreenProps) {
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ['start center', 'end center'],
+  });
+
   return (
     <div id="screen-timeline" className="relative w-full overflow-x-clip bg-brand-cream">
       {/* Section 1: Hero */}
@@ -123,16 +129,18 @@ export default function TimelineScreen({ texts, poems, onEnterAr }: TimelineScre
           <div className="w-24 h-px bg-brand-red mx-auto mb-4" />
         </motion.div>
 
-        <div className="relative">
-          {/* Vertical Line with animation */}
-          <motion.div 
-            initial={{ height: 0 }}
-            whileInView={{ height: '100%' }}
-            viewport={{ once: true }}
-            transition={{ duration: 2, ease: "easeInOut" }}
-            className="absolute left-1/2 top-0 w-px bg-linear-to-b from-brand-red/20 via-black/5 to-transparent -translate-x-1/2 hidden md:block" 
-          />
-          
+        <div ref={timelineRef} className="relative">
+          {/* Ghost line (fundo sempre visível) */}
+          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-black/8 hidden md:block" />
+
+          {/* Linha de progresso — preenche conforme o scroll */}
+          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 hidden md:block">
+            <motion.div
+              className="w-full h-full bg-brand-red/60 origin-top"
+              style={{ scaleY: scrollYProgress }}
+            />
+          </div>
+
           {texts.timelinePage.events.map((event, index) => (
             <TimelineEventCard key={index} event={event} index={index} />
           ))}
