@@ -5,7 +5,7 @@ import { MODEL_PATHS } from '../../constants/assets';
 
 const DB_NAME = 'poeta-ar';
 const DB_STORE = 'cache';
-const DB_KEY = 'mind-targets-v5';
+const DB_KEY = 'mind-targets-v6';
 
 async function getBuffer(): Promise<ArrayBuffer | null> {
   try {
