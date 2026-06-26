@@ -9,6 +9,7 @@ function ProceduralCloudField() {
   const debugConfig = useStore((state) => state.debugConfig);
   const cloudRefs = useRef<Array<THREE.Group | null>>([]);
   const cloudTimeRef = useRef(0);
+  const driveRef = useRef(0);
 
   const hash01 = (seed: number) => {
     const x = Math.sin(seed * 127.1) * 43758.5453123;
@@ -22,7 +23,9 @@ function ProceduralCloudField() {
         baseY: 3.5 + (index % 3) * 1.0,
         baseZ: -14 - index * 2.0,
         phase: hash01(index + 1) * Math.PI * 2,
-        speedFactor: 0.8 + hash01(index + 101) * 0.6,
+        speedFactor: 0.6 + hash01(index + 101) * 0.8,
+        bobPhase: hash01(index + 201) * Math.PI * 2,
+        bobSpeed: 0.2 + hash01(index + 301) * 0.3,
         volume: 4 + hash01(index + 1001) * 3,
       })),
     [debugConfig.cloudCount]
@@ -30,37 +33,42 @@ function ProceduralCloudField() {
 
   useFrame((_, delta) => {
     const liveConfig = useStore.getState().debugConfig;
+    const energy = useStore.getState().energy;
     const clampedDelta = Math.min(delta, 1 / 30);
+
+    // driveRef accumulates at energy-boosted rate (cursor = wind gust)
+    const energyBoost = 1 + energy * liveConfig.animationEnergyBoost;
+    driveRef.current += clampedDelta * liveConfig.cloudMoveSpeed * energyBoost;
     cloudTimeRef.current += clampedDelta;
 
-    const t = cloudTimeRef.current;
+    const drive = driveRef.current;
+    const tBob = cloudTimeRef.current;
     const angle = (liveConfig.cloudMoveDirectionDeg * Math.PI) / 180;
     const dirX = Math.cos(angle);
     const dirZ = Math.sin(angle);
-    const shouldMove =
-      liveConfig.cloudMotionEnabled &&
-      liveConfig.cloudMoveSpeed > 0.0001 &&
-      liveConfig.cloudMoveAmplitude > 0.0001;
+    const range = liveConfig.cloudMoveAmplitude * 2;
 
     for (let i = 0; i < cloudSeeds.length; i++) {
       const node = cloudRefs.current[i];
       if (!node) continue;
 
       const seed = cloudSeeds[i];
-      if (!shouldMove) {
-        node.position.x = seed.baseX;
-        node.position.y = seed.baseY;
-        node.position.z = seed.baseZ;
+
+      if (!liveConfig.cloudMotionEnabled) {
+        node.position.set(seed.baseX, seed.baseY, seed.baseZ);
         continue;
       }
 
-      const offset =
-        Math.sin(t * liveConfig.cloudMoveSpeed * seed.speedFactor + seed.phase) *
-        liveConfig.cloudMoveAmplitude;
+      // Continuous drift — energy drives the speed, phase spreads clouds apart
+      const raw = drive * seed.speedFactor + seed.phase * liveConfig.cloudMoveAmplitude;
+      const drift = ((raw % range) + range) % range - liveConfig.cloudMoveAmplitude;
 
-      node.position.x = seed.baseX + dirX * offset;
-      node.position.y = seed.baseY;
-      node.position.z = seed.baseZ + dirZ * offset;
+      // Bob amplitude also grows with energy (clouds churn in strong wind)
+      const bob = Math.sin(tBob * seed.bobSpeed + seed.bobPhase) * (0.5 + energy * 1.2);
+
+      node.position.x = seed.baseX + dirX * drift;
+      node.position.y = seed.baseY + bob;
+      node.position.z = seed.baseZ + dirZ * drift;
     }
   });
 
