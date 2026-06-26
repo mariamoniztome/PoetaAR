@@ -5,9 +5,9 @@ import { ArrowLeft, Printer } from 'lucide-react';
 import type { AppTexts } from '../types/content';
 
 const TARGET_IMAGES = [
-  '/targets/target1.png',
-  '/targets/target2.jpeg',
-  '/targets/target3.png',
+  '/targets/1.jpeg',
+  '/targets/2.jpeg',
+  '/targets/3.jpeg',
 ];
 
 export default function QRCodePage() {

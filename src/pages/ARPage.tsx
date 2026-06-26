@@ -6,7 +6,7 @@ import { ArrowLeft, Loader } from 'lucide-react';
 
 const DB_NAME = 'poeta-ar';
 const DB_STORE = 'cache';
-const DB_KEY = 'mind-targets-v5';
+const DB_KEY = 'mind-targets-v6';
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -54,9 +54,9 @@ function loadHTMLImage(src: string): Promise<HTMLImageElement> {
 }
 
 const TARGETS = [
-  '/targets/target1.png',
-  '/targets/target2.jpeg',
-  '/targets/target3.png',
+  '/targets/1.jpeg',
+  '/targets/2.jpeg',
+  '/targets/3.jpeg',
 ];
 
 // anchor index → scene route
