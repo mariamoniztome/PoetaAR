@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useAnimations, useGLTF } from '@react-three/drei';
+import { useFBX, useAnimations } from '@react-three/drei';
+import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import * as THREE from 'three';
 import { useStore } from '../store';
 import { MODEL_PATHS } from '../../constants/assets';
@@ -8,17 +9,13 @@ import { MODEL_PATHS } from '../../constants/assets';
 export function Bird({ index, total }: { index: number; total: number }) {
   const meshRef = useRef<THREE.Group>(null);
 
-  const { scene, animations } = useGLTF(MODEL_PATHS.BIRD);
-  const clonedScene = useMemo(() => scene.clone(), [scene]);
-  const { actions } = useAnimations(animations, meshRef);
+  const original = useFBX(MODEL_PATHS.BIRD);
+  const clone = useMemo(() => SkeletonUtils.clone(original as any) as THREE.Group, [original]);
+  const { actions } = useAnimations(original.animations, meshRef);
 
   useEffect(() => {
-    if (actions && Object.keys(actions).length > 0) {
-      const firstAction = Object.values(actions)[0];
-      if (firstAction) {
-        firstAction.play();
-      }
-    }
+    const firstAction = Object.values(actions)[0];
+    if (firstAction) firstAction.play();
   }, [actions]);
 
   const speed = useMemo(() => 0.8 + Math.random() * 0.4, []);
@@ -62,17 +59,15 @@ export function Bird({ index, total }: { index: number; total: number }) {
       meshRef.current.lookAt(lookTarget);
     }
 
-    if (actions && Object.values(actions)[0]) {
-      const action = Object.values(actions)[0];
-      if (action) {
-        action.timeScale = debugConfig.animationBaseSpeed + energy * debugConfig.animationEnergyBoost;
-      }
+    const firstAction = Object.values(actions)[0];
+    if (firstAction) {
+      firstAction.timeScale = debugConfig.animationBaseSpeed + energy * debugConfig.animationEnergyBoost;
     }
   });
 
   return (
     <group ref={meshRef}>
-      <primitive object={clonedScene} scale={useStore.getState().debugConfig.birdScale} />
+      <primitive object={clone} scale={useStore.getState().debugConfig.birdScale} />
     </group>
   );
 }
@@ -89,4 +84,4 @@ export function Flock() {
   );
 }
 
-useGLTF.preload(MODEL_PATHS.BIRD);
+useFBX.preload(MODEL_PATHS.BIRD);

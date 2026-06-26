@@ -24,6 +24,10 @@ export interface Scene1DebugConfig {
   rotationEnergyAmplitude: number;
   animationBaseSpeed: number;
   animationEnergyBoost: number;
+  oceanX: number;
+  oceanY: number;
+  oceanZ: number;
+  oceanSize: number;
   oceanDeepColor: string;
   oceanShallowColor: string;
   oceanOpacity: number;
@@ -51,6 +55,10 @@ export const defaultScene1DebugConfig: Scene1DebugConfig = {
   rotationEnergyAmplitude: 0,
   animationBaseSpeed: 0,
   animationEnergyBoost: 0,
+  oceanX: 0,
+  oceanY: -24.5,
+  oceanZ: 20.5,
+  oceanSize: 130,
   oceanDeepColor: '#001e36',
   oceanShallowColor: '#006994',
   oceanOpacity: 0.6,

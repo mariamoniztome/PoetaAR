@@ -56,9 +56,9 @@ export default function Scene3({
         <ARScene />
       </Canvas>
 
-      <ARModelAnchor targetIndex={2} modelUrl={MODEL_PATHS.BIRD} modelScale={0.15} />
+      <ARModelAnchor targetIndex={2} modelUrl={MODEL_PATHS.BIRD} modelScale={3} />
 
-      {/* <SceneDebugPanel title="Debug Scene 3" values={{ debugConfig }} onReset={resetDebugConfig}>
+      <SceneDebugPanel title="Debug Scene 3" values={{ debugConfig }} onReset={resetDebugConfig}>
         <DebugSection title="GLB Repeticao">
           <DebugNumberInput
             label="Passaros"
@@ -195,7 +195,7 @@ export default function Scene3({
             onChange={(value) => setDebugConfig({ proceduralCloudOpacity: value })}
           />
         </DebugSection>
-      </SceneDebugPanel> */}
+      </SceneDebugPanel>
     </div>
   );
 }

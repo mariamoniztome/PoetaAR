@@ -3,7 +3,6 @@ import lighthouseGlb from '../assets/models/lighthouse.glb?url';
 import birdGlb from '../assets/models/bird.glb?url';
 import hibiscusGlb from '../assets/models/animation.glb?url';
 import grassGlb from '../assets/models/grass.glb?url';
-// import realisticGrassGlb from '../assets/models/realistic_grass.glb?url';
 import ivyGlb from '../assets/models/ivy.glb?url';
 import leopardGlb from '../assets/models/japonicum.glb?url';
 import cloverGlb from '../assets/models/clover.glb?url';

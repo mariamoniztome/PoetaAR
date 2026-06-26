@@ -38,10 +38,10 @@ interface Config {
 }
 
 const DEFAULT: Config = {
-  hibScale: 4.0,
+  hibScale: 1.29,
   hibX: -0.04, hibY: -0.13, hibZ: -0.14,
-  hibRotX: 0, hibRotY: -2, hibRotZ: 0,
-  hibAnimSpeed: 0.2,
+  hibRotX: 0, hibRotY: 1.54, hibRotZ: 0,
+  hibAnimSpeed: 0.7,
 };
 
 type Status = 'idle' | 'loading' | 'ready' | 'found' | 'error' | 'no-cache';
@@ -60,13 +60,13 @@ export function HibiscusAnchor() {
   const hibRef = useRef<THREE.Object3D | null>(null);
   const mixerRef = useRef<THREE.AnimationMixer | null>(null);
 
-  // Live-sync position + rotation (scale is handled by the bloom loop)
   useEffect(() => {
     const h = hibRef.current;
     if (!h) return;
     h.position.set(cfg.hibX, cfg.hibY, cfg.hibZ);
     h.rotation.set(cfg.hibRotX, cfg.hibRotY, cfg.hibRotZ);
-  }, [cfg.hibX, cfg.hibY, cfg.hibZ, cfg.hibRotX, cfg.hibRotY, cfg.hibRotZ]);
+    h.scale.setScalar(cfg.hibScale);
+  }, [cfg.hibX, cfg.hibY, cfg.hibZ, cfg.hibRotX, cfg.hibRotY, cfg.hibRotZ, cfg.hibScale]);
 
   // ── MindAR init ──────────────────────────────────────────────────────────────
   useEffect(() => {

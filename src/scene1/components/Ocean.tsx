@@ -108,6 +108,10 @@ const fragmentShader = `
 
 export function Ocean() {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const oceanX = useStore((state) => state.debugConfig.oceanX);
+  const oceanY = useStore((state) => state.debugConfig.oceanY);
+  const oceanZ = useStore((state) => state.debugConfig.oceanZ);
+  const oceanSize = useStore((state) => state.debugConfig.oceanSize);
   const uniforms = useMemo(() => ({
     uTime: { value: 0 },
     uEnergy: { value: 0 },
@@ -123,8 +127,8 @@ export function Ocean() {
   });
 
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.5, 0]}>
-      <planeGeometry args={[100, 100, 256, 256]} />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[oceanX, oceanY, oceanZ]}>
+      <planeGeometry args={[oceanSize, oceanSize, 256, 256]} />
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}

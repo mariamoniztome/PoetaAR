@@ -1,7 +1,6 @@
 import { memo, Suspense, useMemo, useRef } from 'react';
 import { Clouds, Cloud } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { Flock } from './Flock';
 import { MotionControllerSafe } from './MotionControllerSafe';
 import * as THREE from 'three';
 import { useStore } from '../store';
@@ -109,7 +108,6 @@ export const ARScene = memo(function ARScene() {
       />
 
       <Suspense fallback={null}>
-        <Flock />
         <ProceduralCloudField />
       </Suspense>
     </>

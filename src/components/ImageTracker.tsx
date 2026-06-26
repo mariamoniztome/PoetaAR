@@ -16,7 +16,7 @@ const DB_NAME = 'poeta-ar';
 const DB_STORE = 'cache';
 // Bump this version string whenever any target image is replaced,
 // so the cached compilation is discarded and rebuilt from the new images.
-const DB_KEY = 'mind-targets-v3';
+const DB_KEY = 'mind-targets-v5';
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
