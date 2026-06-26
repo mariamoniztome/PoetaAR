@@ -1,7 +1,7 @@
 import flowerGlb from '../assets/models/flower.glb?url';
 import lighthouseGlb from '../assets/models/lighthouse.glb?url';
 import birdGlb from '../assets/models/bird.glb?url';
-import hibiscusGlb from '../assets/models/animation.glb?url';
+import FlowerGlb from '../assets/models/animation.glb?url';
 import grassGlb from '../assets/models/grass.glb?url';
 import ivyGlb from '../assets/models/ivy.glb?url';
 import leopardGlb from '../assets/models/japonicum.glb?url';
@@ -19,7 +19,7 @@ export const MODEL_PATHS = {
 
   // Scene 2
   FLOWER: flowerGlb,
-  HIBISCUS: hibiscusGlb,
+  FLOWER_ANIMATION: FlowerGlb,
   GRASS: grassGlb,
   // REALISTIC_GRASS: realisticGrassGlb,
   IVY: ivyGlb,

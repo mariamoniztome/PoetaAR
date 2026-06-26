@@ -3,23 +3,12 @@ import { create } from 'zustand';
 interface Store {
   energy: number;
   targetEnergy: number;
-  debugConfig: Scene3DebugConfig;
+  config: Scene3Config;
   addEnergy: (amount: number) => void;
   updateEnergy: (delta: number) => void;
-  setDebugConfig: (partial: Partial<Scene3DebugConfig>) => void;
-  resetDebugConfig: () => void;
 }
 
-export interface Scene3DebugConfig {
-  birdCount: number;
-  birdScale: number;
-  flockPosition: [number, number, number];
-  baseNoise: number;
-  stormNoiseMultiplier: number;
-  baseLerpSpeed: number;
-  stormLerpSpeed: number;
-  animationBaseSpeed: number;
-  animationEnergyBoost: number;
+export interface Scene3Config {
   cloudScaleMultiplier: number;
   cloudCount: number;
   cloudMoveDirectionDeg: number;
@@ -32,18 +21,10 @@ export interface Scene3DebugConfig {
   directionalLightIntensity: number;
   directionalLightColor: string;
   directionalLightPosition: [number, number, number];
+  animationEnergyBoost: number;
 }
 
-export const defaultScene3DebugConfig: Scene3DebugConfig = {
-  birdCount: 10,
-  birdScale: 0.03,
-  flockPosition: [0, 0, 1],
-  baseNoise: 0.2,
-  stormNoiseMultiplier: 5,
-  baseLerpSpeed: 0.05,
-  stormLerpSpeed: 0.02,
-  animationBaseSpeed: 1,
-  animationEnergyBoost: 2,
+const defaultConfig: Scene3Config = {
   cloudScaleMultiplier: 1.2,
   cloudCount: 5,
   cloudMoveDirectionDeg: 87,
@@ -56,28 +37,19 @@ export const defaultScene3DebugConfig: Scene3DebugConfig = {
   directionalLightIntensity: 3,
   directionalLightColor: '#b1c9cd',
   directionalLightPosition: [5, 10, 5],
+  animationEnergyBoost: 2,
 };
 
 export const useStore = create<Store>((set) => ({
   energy: 0,
   targetEnergy: 0,
-  debugConfig: defaultScene3DebugConfig,
+  config: defaultConfig,
   addEnergy: (amount) =>
-    set((state) => ({
-      targetEnergy: Math.min(state.targetEnergy + amount, 1),
-    })),
+    set((state) => ({ targetEnergy: Math.min(state.targetEnergy + amount, 1) })),
   updateEnergy: (delta) =>
     set((state) => {
       const newTarget = Math.max(state.targetEnergy - delta * 0.2, 0);
       const newEnergy = state.energy + (newTarget - state.energy) * delta * 2.0;
       return { targetEnergy: newTarget, energy: newEnergy };
     }),
-  setDebugConfig: (partial) =>
-    set((state) => ({
-      debugConfig: {
-        ...state.debugConfig,
-        ...partial,
-      },
-    })),
-  resetDebugConfig: () => set({ debugConfig: defaultScene3DebugConfig }),
 }));

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { QrCode, X, Scan } from 'lucide-react';
-import QRScanner from '../components/QRScanner';
+import QRScanner from '../components/ui/QRScanner';
 import TimelineScreen from '../components/timeline/TimelineScreen';
 import type { AppTexts, PoemData } from '../types/content';
 

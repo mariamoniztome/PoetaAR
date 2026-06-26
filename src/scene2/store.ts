@@ -3,14 +3,12 @@ import { create } from 'zustand';
 interface Store {
   energy: number;
   targetEnergy: number;
-  debugConfig: Scene2DebugConfig;
+  config: Scene2Config;
   addEnergy: (amount: number) => void;
   updateEnergy: (delta: number) => void;
-  setDebugConfig: (partial: Partial<Scene2DebugConfig>) => void;
-  resetDebugConfig: () => void;
 }
 
-export interface Scene2DebugConfig {
+export interface Scene2Config {
   flowerCount: number;
   grassCount: number;
   flowerFieldRadius: number;
@@ -29,7 +27,7 @@ export interface Scene2DebugConfig {
   directionalLightPosition: [number, number, number];
 }
 
-export const defaultScene2DebugConfig: Scene2DebugConfig = {
+const defaultConfig: Scene2Config = {
   flowerCount: 700,
   grassCount: 5000,
   flowerFieldRadius: 5,
@@ -51,23 +49,13 @@ export const defaultScene2DebugConfig: Scene2DebugConfig = {
 export const useStore = create<Store>((set) => ({
   energy: 0,
   targetEnergy: 0,
-  debugConfig: defaultScene2DebugConfig,
+  config: defaultConfig,
   addEnergy: (amount) =>
-    set((state) => ({
-      targetEnergy: Math.min(state.targetEnergy + amount, 1),
-    })),
+    set((state) => ({ targetEnergy: Math.min(state.targetEnergy + amount, 1) })),
   updateEnergy: (delta) =>
     set((state) => {
       const newTarget = Math.max(state.targetEnergy - delta * 0.2, 0);
       const newEnergy = state.energy + (newTarget - state.energy) * delta * 2.0;
       return { targetEnergy: newTarget, energy: newEnergy };
     }),
-  setDebugConfig: (partial) =>
-    set((state) => ({
-      debugConfig: {
-        ...state.debugConfig,
-        ...partial,
-      },
-    })),
-  resetDebugConfig: () => set({ debugConfig: defaultScene2DebugConfig }),
 }));

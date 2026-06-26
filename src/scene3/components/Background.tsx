@@ -1,12 +1,12 @@
 import { memo, Suspense, useMemo, useRef } from 'react';
 import { Clouds, Cloud } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { MotionControllerSafe } from './MotionControllerSafe';
+import { MotionControllerSafe } from '../../components/ar/MotionControllerSafe';
 import * as THREE from 'three';
 import { useStore } from '../store';
 
 function ProceduralCloudField() {
-  const debugConfig = useStore((state) => state.debugConfig);
+  const config = useStore((state) => state.config);
   const cloudRefs = useRef<Array<THREE.Group | null>>([]);
   const cloudTimeRef = useRef(0);
   const driveRef = useRef(0);
@@ -18,7 +18,7 @@ function ProceduralCloudField() {
 
   const cloudSeeds = useMemo(
     () =>
-      Array.from({ length: debugConfig.cloudCount }).map((_, index) => ({
+      Array.from({ length: config.cloudCount }).map((_, index) => ({
         baseX: -10 + index * 5,
         baseY: 3.5 + (index % 3) * 1.0,
         baseZ: -14 - index * 2.0,
@@ -28,15 +28,14 @@ function ProceduralCloudField() {
         bobSpeed: 0.2 + hash01(index + 301) * 0.3,
         volume: 4 + hash01(index + 1001) * 3,
       })),
-    [debugConfig.cloudCount]
+    [config.cloudCount]
   );
 
   useFrame((_, delta) => {
-    const liveConfig = useStore.getState().debugConfig;
+    const liveConfig = useStore.getState().config;
     const energy = useStore.getState().energy;
     const clampedDelta = Math.min(delta, 1 / 30);
 
-    // driveRef accumulates at energy-boosted rate (cursor = wind gust)
     const energyBoost = 1 + energy * liveConfig.animationEnergyBoost;
     driveRef.current += clampedDelta * liveConfig.cloudMoveSpeed * energyBoost;
     cloudTimeRef.current += clampedDelta;
@@ -59,11 +58,8 @@ function ProceduralCloudField() {
         continue;
       }
 
-      // Continuous drift — energy drives the speed, phase spreads clouds apart
       const raw = drive * seed.speedFactor + seed.phase * liveConfig.cloudMoveAmplitude;
       const drift = ((raw % range) + range) % range - liveConfig.cloudMoveAmplitude;
-
-      // Bob amplitude also grows with energy (clouds churn in strong wind)
       const bob = Math.sin(tBob * seed.bobSpeed + seed.bobPhase) * (0.5 + energy * 1.2);
 
       node.position.x = seed.baseX + dirX * drift;
@@ -77,22 +73,20 @@ function ProceduralCloudField() {
       {cloudSeeds.map((seed, index) => (
         <group
           key={index}
-          ref={(node) => {
-            cloudRefs.current[index] = node;
-          }}
+          ref={(node) => { cloudRefs.current[index] = node; }}
           position={[seed.baseX, seed.baseY, seed.baseZ]}
         >
           <Cloud
             segments={35}
             bounds={[
-              10 * debugConfig.cloudScaleMultiplier,
-              2 * debugConfig.cloudScaleMultiplier,
-              10 * debugConfig.cloudScaleMultiplier,
+              10 * config.cloudScaleMultiplier,
+              2 * config.cloudScaleMultiplier,
+              10 * config.cloudScaleMultiplier,
             ]}
-            volume={seed.volume * debugConfig.cloudScaleMultiplier}
-            color={debugConfig.proceduralCloudColor}
+            volume={seed.volume * config.cloudScaleMultiplier}
+            color={config.proceduralCloudColor}
             speed={0}
-            opacity={debugConfig.proceduralCloudOpacity}
+            opacity={config.proceduralCloudOpacity}
           />
         </group>
       ))}
@@ -100,21 +94,21 @@ function ProceduralCloudField() {
   );
 }
 
-export const ARScene = memo(function ARScene() {
-  const debugConfig = useStore((state) => state.debugConfig);
+export const Background = memo(function Background() {
+  const config = useStore((state) => state.config);
+  const addEnergy = useStore((state) => state.addEnergy);
+  const updateEnergy = useStore((state) => state.updateEnergy);
 
   return (
     <>
-      <MotionControllerSafe />
-
-      <ambientLight intensity={debugConfig.ambientLightIntensity} />
+      <MotionControllerSafe addEnergy={addEnergy} updateEnergy={updateEnergy} />
+      <ambientLight intensity={config.ambientLightIntensity} />
       <directionalLight
-        position={debugConfig.directionalLightPosition}
-        intensity={debugConfig.directionalLightIntensity}
-        color={debugConfig.directionalLightColor}
+        position={config.directionalLightPosition}
+        intensity={config.directionalLightIntensity}
+        color={config.directionalLightColor}
         castShadow
       />
-
       <Suspense fallback={null}>
         <ProceduralCloudField />
       </Suspense>

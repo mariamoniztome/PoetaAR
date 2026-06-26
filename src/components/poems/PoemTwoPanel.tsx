@@ -9,7 +9,7 @@ interface PoemPanelProps {
 export default function PoemTwoPanel({ poem }: PoemPanelProps) {
   return (
     <motion.section
-      className="min-h-screen w-full flex flex-col items-center justify-center bg-[#f9f7f2] relative overflow-hidden py-32"
+      className="min-h-screen w-full flex flex-col items-center justify-center bg-brand-cream relative overflow-hidden py-32"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}

@@ -27,7 +27,7 @@ export default function PoemOnePanel({ poem }: PoemPanelProps) {
           hidden: { opacity: 0, scale: 0.8 },
           visible: { opacity: 0.05, scale: 1 }
         }}
-        className="absolute w-[800px] h-[800px] border border-black rounded-full pointer-events-none"
+        className="absolute w-200 h-200 border border-black rounded-full pointer-events-none"
       />
 
       {/* Poem Content */}

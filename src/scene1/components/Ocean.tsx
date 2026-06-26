@@ -108,10 +108,10 @@ const fragmentShader = `
 
 export function Ocean() {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
-  const oceanX = useStore((state) => state.debugConfig.oceanX);
-  const oceanY = useStore((state) => state.debugConfig.oceanY);
-  const oceanZ = useStore((state) => state.debugConfig.oceanZ);
-  const oceanSize = useStore((state) => state.debugConfig.oceanSize);
+  const oceanX = useStore((state) => state.config.oceanX);
+  const oceanY = useStore((state) => state.config.oceanY);
+  const oceanZ = useStore((state) => state.config.oceanZ);
+  const oceanSize = useStore((state) => state.config.oceanSize);
   const uniforms = useMemo(() => ({
     uTime: { value: 0 },
     uEnergy: { value: 0 },
