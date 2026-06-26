@@ -22,11 +22,15 @@ export function WildFlower({ position }: { position: [number, number, number] })
     const windStrength = debugConfig.windBaseStrength + energy * debugConfig.windEnergyStrength;
     const windSpeed = speed + energy * debugConfig.windEnergySpeedBoost;
 
-    const swayX = Math.sin(t * windSpeed + offset) * windStrength;
-    const swayZ = Math.cos(t * windSpeed * 0.8 + offset) * windStrength;
+    // Primary sway
+    const swayZ = Math.sin(t * windSpeed + offset) * windStrength;
+    // Secondary frequency for organic feel
+    const swayZ2 = Math.sin(t * windSpeed * 2.3 + offset + 1.1) * windStrength * 0.3;
+    // Gentle forward/back tilt
+    const swayX = Math.sin(t * windSpeed * 0.7 + offset + 0.5) * windStrength * 0.4;
 
+    meshRef.current.rotation.z = swayZ + swayZ2;
     meshRef.current.rotation.x = swayX;
-    meshRef.current.rotation.z = swayZ;
   });
 
   return (

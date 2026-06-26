@@ -47,13 +47,12 @@ interface BgConfig {
 }
 
 const DEFAULT: BgConfig = {
-  camX: 0.75, camY: -0.55, camZ: 8.9, camFov: 40,
-  groundSize: 40, groundY: -2.55, groundOpacity: 0.00,
-  // Y offsets below are RELATIVE to groundY (0 = on the ground)
+  camX: 1.65, camY: -2.00, camZ: 8.9, camFov: 34,
+  groundSize: 40, groundY: -2.55, groundOpacity: 0.14,
   geoCount: 60, geoRadius: 3, geoScaleMin: 0.3, geoScaleMax: 0.9, geoYOffset: 0, geoCurvature: 0,
-  grassCount: 20, grassRadius: 2.5, grassScaleMin: 0.3, grassScaleMax: 0.6, grassYOffset: 0, grassCurvature: 0,
-  ivyCount: 5, leopardCount: 5, cloverCount: 8,
-  plantRadius: 2, plantScaleMin: 0.25, plantScaleMax: 0.5, plantYOffset: 0,
+  grassCount: 18, grassRadius: 2.5, grassScaleMin: 0.3, grassScaleMax: 0.6, grassYOffset: 0, grassCurvature: 0,
+  ivyCount: 20, leopardCount: 20, cloverCount: 30,
+  plantRadius: 5.6, plantScaleMin: 2.0, plantScaleMax: 2.0, plantYOffset: 0.10,
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -96,24 +95,18 @@ function Ground({ cfg }: { cfg: BgConfig }) {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, cfg.groundY, 0]} scale={[cfg.groundSize, cfg.groundSize, 1]}>
       <planeGeometry args={[1, 1]} />
-      <meshStandardMaterial ref={matRef} color="#2a5c1a" roughness={1} transparent opacity={cfg.groundOpacity} depthWrite={false} />
+      <meshStandardMaterial ref={matRef} color="#6b7866" roughness={1} transparent opacity={cfg.groundOpacity} depthWrite={false} />
     </mesh>
   );
 }
 
-function GeoGrass({ frozen, windRef }: { frozen: BgConfig; windRef: React.RefObject<number> }) {
+function GeoGrass({ frozen }: { frozen: BgConfig }) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
-
-  // Store base matrices to apply sway on top each frame
-  const baseMats = useRef<THREE.Matrix4[]>([]);
-  const phases   = useRef<number[]>([]);
 
   useEffect(() => {
     const mesh = meshRef.current;
     if (!mesh) return;
     const dummy = new THREE.Object3D();
-    baseMats.current = [];
-    phases.current   = [];
     for (let i = 0; i < frozen.geoCount; i++) {
       const angle = Math.random() * Math.PI * 2;
       const r = Math.sqrt(Math.random()) * frozen.geoRadius;
@@ -125,41 +118,20 @@ function GeoGrass({ frozen, windRef }: { frozen: BgConfig; windRef: React.RefObj
       dummy.rotation.set((Math.random() - 0.5) * 0.2, Math.random() * Math.PI * 2, 0);
       dummy.scale.set(0.1 * s, 0.3 * s, 0.1 * s);
       dummy.updateMatrix();
-      baseMats.current.push(dummy.matrix.clone());
-      phases.current.push(Math.random() * Math.PI * 2);
       mesh.setMatrixAt(i, dummy.matrix);
     }
     mesh.instanceMatrix.needsUpdate = true;
   }, [frozen]);
 
-  useFrame(({ clock }) => {
-    const mesh = meshRef.current;
-    if (!mesh || baseMats.current.length === 0) return;
-    const t = clock.getElapsedTime();
-    const wind = (windRef.current ?? 0);
-    const amp = 0.05 + wind * 0.18;
-    const dummy = new THREE.Object3D();
-    for (let i = 0; i < frozen.geoCount; i++) {
-      dummy.matrix.copy(baseMats.current[i]);
-      dummy.matrix.decompose(dummy.position, dummy.quaternion, dummy.scale);
-      dummy.rotation.setFromQuaternion(dummy.quaternion);
-      dummy.rotation.z += Math.sin(t * 1.1 + phases.current[i]) * amp;
-      dummy.rotation.x += Math.sin(t * 0.8 + phases.current[i] + 1.3) * amp * 0.5;
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
-    }
-    mesh.instanceMatrix.needsUpdate = true;
-  });
-
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, Math.max(frozen.geoCount, 1)]}>
       <coneGeometry args={[0.015, 1.0, 4, 1]} />
-      <meshStandardMaterial color="#3f7f2d" roughness={0.95} transparent opacity={0.85} />
+      <meshStandardMaterial color="#6b7866" roughness={0.95} transparent opacity={0.85} />
     </instancedMesh>
   );
 }
 
-function GlbScatter({ url, positions, windRef }: { url: string; positions: Pos[]; windRef: React.RefObject<number> }) {
+function GlbScatter({ url, positions, windRef }: { url: string; positions: Pos[]; windRef?: React.RefObject<number> }) {
   const { scene } = useGLTF(url);
 
   const clones = useMemo(() => positions.map((p) => {
@@ -171,6 +143,7 @@ function GlbScatter({ url, positions, windRef }: { url: string; positions: Pos[]
   const phases = useMemo(() => positions.map(() => Math.random() * Math.PI * 2), [positions]);
 
   useFrame(({ clock }) => {
+    if (!windRef) return;
     const t = clock.getElapsedTime();
     const wind = (windRef.current ?? 0);
     const amp = 0.04 + wind * 0.14;
@@ -230,9 +203,9 @@ function BgScene({ live, frozen }: { live: BgConfig; frozen: BgConfig }) {
       <directionalLight position={[3, 8, 5]} intensity={2.5} />
 
       <Ground cfg={live} />
-      <GeoGrass frozen={frozen} windRef={windRef} />
+      <GeoGrass frozen={frozen} />
 
-      <GlbScatter url={MODEL_PATHS.GRASS}         positions={grassPos} windRef={windRef} />
+      <GlbScatter url={MODEL_PATHS.GRASS}         positions={grassPos} />
       <GlbScatter url={MODEL_PATHS.IVY}           positions={ivyPos}   windRef={windRef} />
       <GlbScatter url={MODEL_PATHS.LEOPARD_PLANT} positions={leopardPos} windRef={windRef} />
       <GlbScatter url={MODEL_PATHS.WHITE_CLOVER}  positions={cloverPos}  windRef={windRef} />
@@ -282,7 +255,7 @@ export function Scene2Background() {
           <Sl label="Cam X"  v={live.camX}  min={-5} max={5} step={0.05} o={(v) => set({ camX: v })} />
           <Sl label="Cam Y"  v={live.camY}  min={-10} max={10} step={0.05} o={(v) => set({ camY: v })} />
           <Sl label="Cam Z"  v={live.camZ}  min={0.5} max={10} step={0.1} o={(v) => set({ camZ: v })} />
-          <Sl label="FOV"    v={live.camFov} min={40} max={120} step={1} o={(v) => set({ camFov: v })} />
+          <Sl label="FOV"    v={live.camFov} min={10} max={120} step={1} o={(v) => set({ camFov: v })} />
         </Sec>
 
         <Sec label="Chão ✦ tempo real">
