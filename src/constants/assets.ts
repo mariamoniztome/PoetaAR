@@ -1,4 +1,3 @@
-import flowerGlb from '../assets/models/flower.glb?url';
 import lighthouseGlb from '../assets/models/lighthouse.glb?url';
 import birdGlb from '../assets/models/bird.glb?url';
 import FlowerGlb from '../assets/models/animation.glb?url';
@@ -18,10 +17,8 @@ export const MODEL_PATHS = {
   FLOATING_OBJECT: lighthouseGlb,
 
   // Scene 2
-  FLOWER: flowerGlb,
   FLOWER_ANIMATION: FlowerGlb,
   GRASS: grassGlb,
-  // REALISTIC_GRASS: realisticGrassGlb,
   IVY: ivyGlb,
   LEOPARD_PLANT: leopardGlb,
   WHITE_CLOVER: cloverGlb,

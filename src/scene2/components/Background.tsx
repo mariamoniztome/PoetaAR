@@ -84,33 +84,6 @@ function GlbScatter({ url, positions, animated = false }: { url: string; positio
   );
 }
 
-function WildFlower({ position }: { position: [number, number, number] }) {
-  const meshRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF(MODEL_PATHS.FLOWER);
-  const clonedScene = useMemo(() => scene.clone(), [scene]);
-  const offset = useMemo(() => Math.random() * Math.PI * 2, []);
-  const speed = useMemo(() => 0.5 + Math.random() * 0.5, []);
-
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    const t = state.clock.elapsedTime;
-    const { energy, config } = useStore.getState();
-    const windStrength = config.windBaseStrength + energy * config.windEnergyStrength;
-    const windSpeed = speed + energy * config.windEnergySpeedBoost;
-    const swayZ = Math.sin(t * windSpeed + offset) * windStrength;
-    const swayZ2 = Math.sin(t * windSpeed * 2.3 + offset + 1.1) * windStrength * 0.3;
-    const swayX = Math.sin(t * windSpeed * 0.7 + offset + 0.5) * windStrength * 0.4;
-    meshRef.current.rotation.z = swayZ + swayZ2;
-    meshRef.current.rotation.x = swayX;
-  });
-
-  return (
-    <group position={position} ref={meshRef}>
-      <primitive object={clonedScene} scale={useStore.getState().config.flowerScale} />
-    </group>
-  );
-}
-
 export function Background() {
   const config = useStore((state) => state.config);
   const addEnergy = useStore((state) => state.addEnergy);
@@ -143,10 +116,6 @@ export function Background() {
       <GlbScatter url={MODEL_PATHS.IVY}           positions={ivyPos}     animated />
       <GlbScatter url={MODEL_PATHS.LEOPARD_PLANT} positions={leopardPos} animated />
       <GlbScatter url={MODEL_PATHS.WHITE_CLOVER}  positions={cloverPos}  animated />
-
-      {flowers.map((f, i) => (
-        <WildFlower key={i} position={f.position} />
-      ))}
     </>
   );
 }
@@ -155,4 +124,3 @@ useGLTF.preload(MODEL_PATHS.GRASS);
 useGLTF.preload(MODEL_PATHS.IVY);
 useGLTF.preload(MODEL_PATHS.LEOPARD_PLANT);
 useGLTF.preload(MODEL_PATHS.WHITE_CLOVER);
-useGLTF.preload(MODEL_PATHS.FLOWER);
