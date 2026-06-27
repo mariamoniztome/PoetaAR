@@ -23,6 +23,8 @@ export function AudioExperience({
     const bgAudio = new Audio(backgroundUrl);
     bgAudio.loop = true;
     bgAudio.volume = 0.4;
+    bgAudio.setAttribute('playsinline', '');
+    bgAudio.setAttribute('webkit-playsinline', '');
     bgAudioRef.current = bgAudio;
 
     // 2. Initialize optional narration audio
@@ -31,6 +33,8 @@ export function AudioExperience({
     if (narrationAudio) {
       narrationAudio.loop = false;
       narrationAudio.volume = 1.0;
+      narrationAudio.setAttribute('playsinline', '');
+      narrationAudio.setAttribute('webkit-playsinline', '');
       narrationAudioRef.current = narrationAudio;
 
       // Restore background volume when narration ends
