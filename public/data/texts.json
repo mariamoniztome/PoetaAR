@@ -37,7 +37,7 @@
       {
         "year": "1930s",
         "title": "Resistência no Estado Novo",
-        "desc": "Durante o Estado Novo, e perseguido e preso. Mantém os ideais libertarios, continuando a escrever e a cantar em contexto popular.",
+        "desc": "Durante o Estado Novo, é perseguido e preso. Mantém os ideais libertários, continuando a escrever e a cantar em contexto popular.",
         "imageB": "/img/estadonovo.jpg"
       },
       {
@@ -49,7 +49,7 @@
       {
         "year": "1967",
         "title": "A Lira do Povo",
-        "desc": "Sai a primeira edicao postuma de A Lira do Povo, fixando em livro uma parte essencial da obra que circulava dispersa.",
+        "desc": "Sai a primeira edição póstuma de A Lira do Povo, fixando em livro uma parte essencial da obra que circulava dispersa.",
         "imageB": "/img/lira.jpg"
       },
       {
@@ -82,7 +82,7 @@
         "roman": "I",
         "label": "O Mar",
         "qrCode": "/scene/sea",
-        "imageTarget": "/targets/target1.jpg"
+        "imageTarget": "/targets/1.jpeg"
       }
     },
     {
@@ -98,7 +98,7 @@
         "roman": "II",
         "label": "O Campo",
         "qrCode": "/scene/field",
-        "imageTarget": "/targets/target2.jpg"
+        "imageTarget": "/targets/2.jpeg"
       }
     },
     {
@@ -114,7 +114,7 @@
         "roman": "III",
         "label": "O Céu",
         "qrCode": "/scene/sky",
-        "imageTarget": "/targets/target3.jpg"
+        "imageTarget": "/targets/3.jpeg"
       }
     }
   ],
