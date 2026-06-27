@@ -7,43 +7,43 @@
       {
         "year": "1886",
         "title": "Nasce em Vilar",
-        "desc": "Joaquim Moreira da Silva nasce a 15 de marco, em Vilar. A infancia, marcada pelo trabalho rural, vai influenciar o tom popular dos seus versos.",
+        "desc": "Joaquim Moreira da Silva nasce a 15 de março, em Vilar. A infância, marcada pelo trabalho rural, vai influenciar o tom popular dos seus versos.",
         "imageA": "/img/casa.jpeg"
       },
       {
         "year": "1890",
         "title": "A Foicinha e o Olho",
-        "desc": "Ainda jovem, num episodio num adro festivo, perde parcialmente a visao de um olho. O acontecimento atravessa a memoria oral da comunidade.",
+        "desc": "Ainda jovem, num episódio num adro festivo, perde parcialmente a visão de um olho. O acontecimento atravessa a memória oral da comunidade.",
         "imageB": "/img/36anos.png"
       },
       {
         "year": "1904",
-        "title": "Porto: Oficio e Leitura",
+        "title": "Porto: Ofício e Leitura",
         "desc": "Com cerca de 18 anos vai para o Porto, aprende carpintaria e frequenta escola noturna. A leitura autodidata passa a ser parte central da sua formação.",
         "imageA": "/img/porto.jpg"
       },
       {
         "year": "1910",
-        "title": "Republica e Voz Militante",
-        "desc": "No contexto da implantacao da Republica, aproxima-se do meio anarco-sindicalista e usa a poesia como instrumento de critica social.",
+        "title": "República e Voz Militante",
+        "desc": "No contexto da implantação da República, aproxima-se do meio anarco-sindicalista e usa a poesia como instrumento de crítica social.",
         "imageB": "/img/acompanhado.jpeg"
       },
       {
         "year": "1910-1930",
         "title": "Folhas Volantes e Oralidade",
-        "desc": "Os poemas circulam em folhetos de pequena tiragem e em desafios cantados. Muito da sua obra sobrevive pela transmissao oral entre familias e vizinhos.",
+        "desc": "Os poemas circulam em folhetos de pequena tiragem e em desafios cantados. Muito da sua obra sobrevive pela transmissão oral entre famílias e vizinhos.",
         "imageA": "/img/educacao.png"
       },
       {
         "year": "1930s",
-        "title": "Resistencia no Estado Novo",
-        "desc": "Durante o Estado Novo, e perseguido e preso. Mantem os ideais libertarios, continuando a escrever e a cantar em contexto popular.",
+        "title": "Resistência no Estado Novo",
+        "desc": "Durante o Estado Novo, e perseguido e preso. Mantém os ideais libertarios, continuando a escrever e a cantar em contexto popular.",
         "imageB": "/img/estadonovo.jpg"
       },
       {
         "year": "1960",
         "title": "Morte e Cortejo Popular",
-        "desc": "Morre a 12 de dezembro, aos 74 anos. O funeral torna-se um gesto coletivo de reconhecimento por parte da populacao de Vila do Conde.",
+        "desc": "Morre a 12 de dezembro, aos 74 anos. O funeral torna-se um gesto coletivo de reconhecimento por parte da população de Vila do Conde.",
         "imageA": "/img/bengala.jpeg"
       },
       {
@@ -55,13 +55,13 @@
       {
         "year": "2024",
         "title": "Nova Antologia",
-        "desc": "A Opera Omnia publica A Lira Dileta e A Lira da Rebeldia, reativando o interesse critico e editorial em torno do Poeta Carpinteiro.",
+        "desc": "A Ópera Omnia publica A Lira Dileta e A Lira da Rebeldia, reativando o interesse crítico e editorial em torno do Poeta Carpinteiro.",
         "imageA": "/img/capa_livro.jpg"
       },
       {
         "year": "2026",
         "title": "140 Anos: Programa Expandido",
-        "desc": "As celebracoes dos 140 anos cruzam escola, exposicao, teatro e percurso poetico, aproximando novas geracoes da sua obra e biografia.",
+        "desc": "As celebrações dos 140 anos cruzam escola, exposição, teatro e percurso poético, aproximando novas gerações da sua obra e biografia.",
         "imageB": "/img/140.png"
       }
     ],
